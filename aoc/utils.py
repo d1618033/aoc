@@ -5,7 +5,8 @@ import re
 import typing
 from contextvars import ContextVar
 
-input_file_ctx = ContextVar("input_file", default=None)
+input_file_ctx = ContextVar("input_file", default="input")
+day_ctx = ContextVar("day", default=None)
 
 
 def get_file_path(
@@ -13,19 +14,21 @@ def get_file_path(
 ) -> str:
     if file_name is None:
         file_name = input_file_ctx.get()
-        if file_name is None:
-            file_name = "input"
 
     if os.path.isabs(file_name):
         return file_name
 
     if day is None:
-        for frame in inspect.stack():
-            if "day" in frame.filename:
-                day = int(unwrap(re.search(r"day(\d+)", frame.filename)).groups()[0])
-                break
-        else:
-            day = 1
+        day = day_ctx.get()
+        if day is None:
+            for frame in inspect.stack():
+                if "day" in frame.filename:
+                    day = int(
+                        unwrap(re.search(r"day(\d+)", frame.filename)).groups()[0]
+                    )
+                    break
+            else:
+                day = 1
     return os.path.join(os.path.dirname(__file__), "..", "data", f"day{day}", file_name)
 
 

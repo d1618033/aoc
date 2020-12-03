@@ -18,10 +18,10 @@ poetry install
 To run the solution for a particular day:
 
 ```
-aoc solve --day [day_number] --input [your_file]
+aoc solve [day_number] --input [your_file]
 ```
 
 For example:
 ```
-aoc solve --day 1 --input data/day1/input
+aoc solve 1 --input data/day1/input
 ```

@@ -12,9 +12,11 @@ def cli():
 
 
 @cli.command()
-@click.option("--day")
-@click.option("--input", "input_file")
-def solve(day, input_file):
+@click.argument("day")
+@click.option("--input", "input_file", default=None)
+def solve(day, input_file=None):
     module = importlib.import_module(f"aoc.day{day}")
-    utils.input_file_ctx.set(os.path.abspath(input_file))
+    if input_file:
+        utils.input_file_ctx.set(os.path.abspath(input_file))
+    utils.day_ctx.set(day)
     module.main()
