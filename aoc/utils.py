@@ -1,6 +1,7 @@
 import enum
 import inspect
 import re
+from contextlib import ExitStack, contextmanager
 from contextvars import ContextVar
 from functools import reduce
 from pathlib import Path
@@ -10,6 +11,31 @@ from fn.monad import Option
 
 input_file_ctx: ContextVar[Optional[Path]] = ContextVar("input_file", default=None)
 day_ctx: ContextVar[Optional[int]] = ContextVar("day", default=None)
+
+
+MAIN_FOLDER: Path = Path(__file__).parent
+TESTS_FOLDER: Path = MAIN_FOLDER.parent / "tests"
+DATA_FOLDER: Path = MAIN_FOLDER.parent / "data"
+
+
+@contextmanager
+def set_and_reset(contextvar, value):
+    token = contextvar.set(value)
+    yield
+    contextvar.reset(token)
+
+
+@contextmanager
+def setting_defaults(*, input_file: Optional[Path] = None, day: Optional[int] = None):
+    variables_and_contexts = [
+        (input_file, input_file_ctx),
+        (day, day_ctx),
+    ]
+    with ExitStack() as stack:
+        for value, contextvar in variables_and_contexts:
+            if value:
+                stack.enter_context(set_and_reset(contextvar, value))
+        yield
 
 
 def _get_day_from_caller() -> Optional[int]:

@@ -6,16 +6,14 @@ from pathlib import Path
 import click
 import jinja2
 import requests
-from typeguard.importhook import install_import_hook
 
-install_import_hook("aoc")
-
-from aoc import utils
-from aoc.utils import get_day_from_file_name
-
-MAIN_FOLDER: Path = Path(__file__).parent.parent
-TESTS_FOLDER: Path = MAIN_FOLDER.parent / "tests"
-DATA_FOLDER: Path = MAIN_FOLDER.parent / "data"
+from aoc.utils import (
+    DATA_FOLDER,
+    MAIN_FOLDER,
+    TESTS_FOLDER,
+    get_day_from_file_name,
+    setting_defaults,
+)
 
 
 @click.group()
@@ -27,11 +25,11 @@ def cli():
 @click.argument("day")
 @click.option("--input", "input_file", default=None)
 def solve(day, input_file=None):
-    module = importlib.import_module(f"aoc.day{day}")
-    if input_file:
-        utils.input_file_ctx.set(Path(input_file).resolve())
-    utils.day_ctx.set(day)
-    module.main()
+    if input_file is not None:
+        input_file = Path(input_file).resolve()
+    with setting_defaults(input_file=input_file, day=day):
+        module = importlib.import_module(f"aoc.day{day}")
+        module.main()
 
 
 @cli.command()

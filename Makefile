@@ -5,7 +5,6 @@ do_format:
 	black $(FOLDERS)
 
 format:
-	isort -c $(FOLDERS)
 	black -c $(FOLDERS)
 
 test:
