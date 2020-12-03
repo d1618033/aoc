@@ -1,6 +1,6 @@
-import math
 from dataclasses import dataclass
 from itertools import starmap
+from math import prod
 from typing import Callable, Iterator, List, Optional
 
 from aoc.utils import StringEnum, load_input
@@ -86,7 +86,7 @@ def part2(grid: Grid) -> int:
             (1, 2),
         ],
     )
-    return math.prod(num_trees_encountered(stepper, grid) for stepper in steppers)
+    return prod(num_trees_encountered(stepper, grid) for stepper in steppers)
 
 
 def main():
