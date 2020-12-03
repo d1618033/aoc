@@ -8,9 +8,7 @@ This repository contains my solutions to Advent of Code 2020
 ## Installation
 
 ```
-git clone https://github.com/d1618033/aoc.git
-cd aoc
-poetry install
+pip install git+https://github.com/d1618033/aoc.git
 ```
 
 ## Running
