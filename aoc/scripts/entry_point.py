@@ -2,9 +2,8 @@ import importlib
 import os
 import shutil
 
-import jinja2
-
 import click
+import jinja2
 
 from aoc import utils
 from aoc.utils import get_day_from_file_name
@@ -37,7 +36,7 @@ def new(day=None):
         day = get_last_day() + 1
     click.echo(f"Making day{day}")
     jinja_env = jinja2.Environment(
-        loader=jinja2.PackageLoader('aoc', 'templates'),
+        loader=jinja2.PackageLoader("aoc", "templates"),
         keep_trailing_newline=True,
     )
     kwargs = {"day_number": day}
