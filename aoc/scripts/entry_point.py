@@ -1,9 +1,11 @@
 import importlib
+import json
 import os
 import shutil
 
 import click
 import jinja2
+import requests
 
 from aoc import utils
 from aoc.utils import get_day_from_file_name
@@ -31,7 +33,8 @@ def solve(day, input_file=None):
 
 @cli.command()
 @click.option("--day", default=None)
-def new(day=None):
+@click.option("--session", default=None)
+def new(day=None, session=None):
     if day is None:
         day = get_last_day() + 1
     click.echo(f"Making day{day}")
@@ -44,7 +47,38 @@ def new(day=None):
         f.write(jinja_env.get_template("day.jinja").render(**kwargs))
     with open(os.path.join(TESTS_FOLDER, f"test_day{day}.py"), "w") as f:
         f.write(jinja_env.get_template("test_day.jinja").render(**kwargs))
-    os.mkdir(os.path.join(DATA_FOLDER, f"day{day}"))
+    data_folder = os.path.join(DATA_FOLDER, f"day{day}")
+    os.mkdir(data_folder)
+    download_input_for_day(day, session=session)
+
+
+def download_input_for_day(day, *, session=None):
+    data_folder = os.path.join(DATA_FOLDER, f"day{day}")
+    if session is None:
+        session = get_session()
+    with open(os.path.join(data_folder, "input"), "wb") as f:
+        for chunk in requests.get(
+            f"https://adventofcode.com/2020/day/{day}/input",
+            cookies={"session": session},
+            stream=True,
+        ).iter_content(chunk_size=1024):
+            f.write(chunk)
+
+
+def get_session():
+    with open(os.path.expanduser("~/.aoc")) as f:
+        config = json.load(f)
+    session = config["session"]
+    return session
+
+
+@cli.command()
+@click.option("--day", default=None)
+@click.option("--session", default=None)
+def download(day=None, session=None):
+    if day is None:
+        day = get_last_day()
+    download_input_for_day(day, session=session)
 
 
 def get_all_days():

@@ -11,6 +11,7 @@ pydantic = "^1.7.3"
 click = "^7.1.2"
 "fn.py" = "^0.5.2"
 Jinja2 = "^2.11.2"
+requests = "^2.25.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
