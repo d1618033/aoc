@@ -44,10 +44,12 @@ def new(day=None, session=None):
         keep_trailing_newline=True,
     )
     kwargs = {"day_number": day}
-    with MAIN_FOLDER.joinpath(f"day{day}.py").open("w") as f:
-        f.write(jinja_env.get_template("day.jinja").render(**kwargs))
-    with TESTS_FOLDER.joinpath(f"test_day{day}.py").open("w") as f:
-        f.write(jinja_env.get_template("test_day.jinja").render(**kwargs))
+    MAIN_FOLDER.joinpath(f"day{day}.py").write_text(
+        jinja_env.get_template("day.jinja").render(**kwargs)
+    )
+    TESTS_FOLDER.joinpath(f"test_day{day}.py").write_text(
+        jinja_env.get_template("test_day.jinja").render(**kwargs)
+    )
     data_folder = DATA_FOLDER.joinpath(f"day{day}")
     data_folder.mkdir()
     download_input_for_day(day, session=session)
@@ -67,8 +69,7 @@ def download_input_for_day(day, *, session=None):
 
 
 def get_session():
-    with Path("~/.aoc").expanduser().open() as f:
-        config = json.load(f)
+    config = json.loads(Path("~/.aoc").expanduser().read_text())
     session = config["session"]
     return session
 

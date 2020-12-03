@@ -63,8 +63,7 @@ def _get_input_file_path(
 
 
 def load_input(file_path: Optional[Path] = None, *, day: Optional[int] = None):
-    with _get_input_file_path(file_path, day).open() as file:
-        return file.read().splitlines()
+    return _get_input_file_path(file_path, day).read_text().splitlines()
 
 
 class StringEnum(str, enum.Enum):
