@@ -4,6 +4,7 @@ import os
 import re
 import typing
 from contextvars import ContextVar
+from functools import reduce
 
 input_file_ctx = ContextVar("input_file", default="input")
 day_ctx = ContextVar("day", default=None)
@@ -48,3 +49,13 @@ def unwrap(element: typing.Optional[GenericType]) -> GenericType:
     if element is None:
         raise ValueError("Unexpected None")
     return element
+
+
+def _compose2(f, g):
+    def new_func(*args, **kwargs):
+        return f(g(*args, **kwargs))
+    return new_func
+
+
+def compose(*functions):
+    return reduce(_compose2, functions)

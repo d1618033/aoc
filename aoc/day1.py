@@ -1,25 +1,29 @@
-from typing import Optional, Set
+import itertools
+from math import prod
+from typing import Set, Tuple
 
-from aoc.utils import load_input
+from aoc.utils import load_input, compose
 
 GOAL_NUMBER = 2020
 
 
-def part1(numbers: Set[int], goal_number: int = GOAL_NUMBER) -> Optional[int]:
-    for number in numbers:
-        complement = goal_number - number
+def find_numbers_that_sum_to_goal(numbers: Set[int], sample_size: int, goal_number: int = GOAL_NUMBER) -> Tuple[int]:
+    for sample in itertools.combinations(numbers, r=sample_size - 1):
+        complement = goal_number - sum(sample)
         if complement in numbers:
-            return complement * number
-    return None
+            return (complement,) + sample
+    return tuple()
 
 
-def part2(numbers: Set[int], goal_number: int = GOAL_NUMBER) -> Optional[int]:
-    for number1 in numbers:
-        for number2 in numbers:
-            number3 = goal_number - number1 - number2
-            if number1 != number2 and number3 in numbers:
-                return number1 * number2 * number3
-    return None
+multiply_numbers_that_sum_to_goal = compose(prod, find_numbers_that_sum_to_goal)
+
+
+def part1(numbers):
+    return multiply_numbers_that_sum_to_goal(numbers, sample_size=2)
+
+
+def part2(numbers):
+    return multiply_numbers_that_sum_to_goal(numbers, sample_size=3)
 
 
 def main():
