@@ -5,7 +5,7 @@ from aoc.day3 import Grid, part1, part2
 
 @pytest.fixture
 def grid():
-    return Grid.from_file("example")
+    return Grid.from_input()
 
 
 def test_part1(grid):

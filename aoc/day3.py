@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from itertools import starmap
 from typing import Callable, Iterator, List, Optional
 
-from aoc.utils import StringEnum, load
+from aoc.utils import StringEnum, load_input
 
 
 class Square(StringEnum):
@@ -29,11 +29,11 @@ class Grid:
         return coordinate.row < len(self._data)
 
     @classmethod
-    def from_file(cls, file_name: str) -> "Grid":
+    def from_input(cls) -> "Grid":
         return cls(
             [
                 [Square(char) for char in list(line.strip())]
-                for line in load(file_name, day=3)
+                for line in load_input()
                 if line.strip()
             ]
         )
@@ -90,7 +90,7 @@ def part2(grid):
 
 
 def main():
-    grid = Grid.from_file("input")
+    grid = Grid.from_input()
     print("part1", part1(grid))
     print("part2", part2(grid))
 

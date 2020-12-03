@@ -1,6 +1,6 @@
 from typing import Optional, Set
 
-from aoc.utils import load
+from aoc.utils import load_input
 
 GOAL_NUMBER = 2020
 
@@ -23,9 +23,9 @@ def part2(numbers: Set[int], goal_number: int = GOAL_NUMBER) -> Optional[int]:
 
 
 def main():
-    numbers = {int(line) for line in load("input", day=1)}
-    print(part1(numbers))
-    print(part2(numbers))
+    numbers = {int(line) for line in load_input()}
+    print("part1", part1(numbers))
+    print("part2", part2(numbers))
 
 
 if __name__ == "__main__":

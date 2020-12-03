@@ -3,7 +3,7 @@ from typing import Callable
 
 from pydantic.main import BaseModel
 
-from aoc.utils import load, unwrap
+from aoc.utils import load_input, unwrap
 
 
 class Policy(BaseModel):
@@ -14,9 +14,12 @@ class Policy(BaseModel):
 
 
 def parse_line(line: str) -> Policy:
-    match = unwrap(re.match(
-        r"(?P<lower>\d+)-(?P<upper>\d+)\s+(?P<letter>\w+):\s+(?P<password>\w+)", line
-    )).groupdict()
+    match = unwrap(
+        re.match(
+            r"(?P<lower>\d+)-(?P<upper>\d+)\s+(?P<letter>\w+):\s+(?P<password>\w+)",
+            line,
+        )
+    ).groupdict()
     return Policy(**match)
 
 
@@ -35,9 +38,13 @@ def is_valid_part_2(line: str) -> bool:
 
 
 def num_valid_in_file(validation_func: Callable[[str], bool]) -> int:
-    return sum(validation_func(line) for line in load("input", day=2))
+    return sum(validation_func(line) for line in load_input())
+
+
+def main():
+    print("part1", num_valid_in_file(is_valid_part_1))
+    print("part2", num_valid_in_file(is_valid_part_2))
 
 
 if __name__ == "__main__":
-    print(num_valid_in_file(is_valid_part_1))
-    print(num_valid_in_file(is_valid_part_2))
+    main()
