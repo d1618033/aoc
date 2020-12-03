@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from typeguard.importhook import install_import_hook
 
@@ -8,4 +10,4 @@ from aoc import utils
 
 @pytest.fixture(autouse=True)
 def input_file():
-    utils.input_file_ctx.set("example")
+    utils.input_file_ctx.set(Path("example"))

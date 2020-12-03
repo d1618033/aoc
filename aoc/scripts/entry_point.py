@@ -1,7 +1,7 @@
 import importlib
 import json
-import os
 import shutil
+from pathlib import Path
 
 import click
 import jinja2
@@ -13,9 +13,9 @@ install_import_hook("aoc")
 from aoc import utils
 from aoc.utils import get_day_from_file_name
 
-MAIN_FOLDER = os.path.join(os.path.dirname(__file__), "..")
-TESTS_FOLDER = os.path.join(MAIN_FOLDER, "..", "tests")
-DATA_FOLDER = os.path.join(MAIN_FOLDER, "..", "data")
+MAIN_FOLDER: Path = Path(__file__).parent.parent
+TESTS_FOLDER: Path = MAIN_FOLDER.parent / "tests"
+DATA_FOLDER: Path = MAIN_FOLDER.parent / "data"
 
 
 @click.group()
@@ -29,7 +29,7 @@ def cli():
 def solve(day, input_file=None):
     module = importlib.import_module(f"aoc.day{day}")
     if input_file:
-        utils.input_file_ctx.set(os.path.abspath(input_file))
+        utils.input_file_ctx.set(Path(input_file).absolute())
     utils.day_ctx.set(day)
     module.main()
 
@@ -46,20 +46,20 @@ def new(day=None, session=None):
         keep_trailing_newline=True,
     )
     kwargs = {"day_number": day}
-    with open(os.path.join(MAIN_FOLDER, f"day{day}.py"), "w") as f:
+    with MAIN_FOLDER.joinpath(f"day{day}.py").open("w") as f:
         f.write(jinja_env.get_template("day.jinja").render(**kwargs))
-    with open(os.path.join(TESTS_FOLDER, f"test_day{day}.py"), "w") as f:
+    with TESTS_FOLDER.joinpath(f"test_day{day}.py").open("w") as f:
         f.write(jinja_env.get_template("test_day.jinja").render(**kwargs))
-    data_folder = os.path.join(DATA_FOLDER, f"day{day}")
-    os.mkdir(data_folder)
+    data_folder = DATA_FOLDER.joinpath(f"day{day}")
+    data_folder.mkdir()
     download_input_for_day(day, session=session)
 
 
 def download_input_for_day(day, *, session=None):
-    data_folder = os.path.join(DATA_FOLDER, f"day{day}")
+    data_folder = DATA_FOLDER.joinpath(f"day{day}")
     if session is None:
         session = get_session()
-    with open(os.path.join(data_folder, "input"), "wb") as f:
+    with data_folder.joinpath("input").open("wb") as f:
         for chunk in requests.get(
             f"https://adventofcode.com/2020/day/{day}/input",
             cookies={"session": session},
@@ -69,7 +69,7 @@ def download_input_for_day(day, *, session=None):
 
 
 def get_session():
-    with open(os.path.expanduser("~/.aoc")) as f:
+    with Path("~/.aoc").expanduser().open() as f:
         config = json.load(f)
     session = config["session"]
     return session
@@ -85,11 +85,7 @@ def download(day=None, session=None):
 
 
 def get_all_days():
-    return [
-        get_day_from_file_name(file)
-        for file in os.listdir(MAIN_FOLDER)
-        if file.startswith("day")
-    ]
+    return [get_day_from_file_name(str(file)) for file in MAIN_FOLDER.glob("day*.py")]
 
 
 @cli.command()
@@ -97,9 +93,9 @@ def get_all_days():
 def rm(day=None):
     if day is None:
         day = get_last_day()
-    os.remove(os.path.join(MAIN_FOLDER, f"day{day}.py"))
-    os.remove(os.path.join(TESTS_FOLDER, f"test_day{day}.py"))
-    shutil.rmtree(os.path.join(DATA_FOLDER, f"day{day}"))
+    MAIN_FOLDER.joinpath(f"day{day}.py").unlink()
+    TESTS_FOLDER.joinpath(f"test_day{day}.py").unlink()
+    shutil.rmtree(DATA_FOLDER.joinpath(f"day{day}"))
 
 
 def get_last_day():
