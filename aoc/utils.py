@@ -54,6 +54,7 @@ def unwrap(element: typing.Optional[GenericType]) -> GenericType:
 def _compose2(f, g):
     def new_func(*args, **kwargs):
         return f(g(*args, **kwargs))
+
     return new_func
 
 

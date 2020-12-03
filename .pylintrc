@@ -1,2 +1,2 @@
 [MESSAGE CONTROL]
-disable=missing-docstring,redefined-outer-name,too-few-public-methods,no-name-in-module
+disable=missing-docstring,redefined-outer-name,too-few-public-methods,no-name-in-module,invalid-name

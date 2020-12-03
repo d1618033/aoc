@@ -64,18 +64,18 @@ def make_stepper(right: int, down: int) -> Stepper:
     return stepper
 
 
-def num_trees_encountered(stepper, grid):
+def num_trees_encountered(stepper: Stepper, grid: Grid) -> int:
     return sum(
         grid[coordinate] == Square.tree
         for coordinate in step_through_grid(stepper, grid)
     )
 
 
-def part1(grid):
+def part1(grid: Grid) -> int:
     return num_trees_encountered(make_stepper(3, 1), grid)
 
 
-def part2(grid):
+def part2(grid: Grid) -> int:
     steppers = starmap(
         make_stepper,
         [

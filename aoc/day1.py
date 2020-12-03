@@ -2,12 +2,14 @@ import itertools
 from math import prod
 from typing import Set, Tuple
 
-from aoc.utils import load_input, compose
+from aoc.utils import compose, load_input
 
 GOAL_NUMBER = 2020
 
 
-def find_numbers_that_sum_to_goal(numbers: Set[int], sample_size: int, goal_number: int = GOAL_NUMBER) -> Tuple[int]:
+def find_numbers_that_sum_to_goal(
+    numbers: Set[int], sample_size: int, goal_number: int = GOAL_NUMBER
+) -> Tuple[int, ...]:
     for sample in itertools.combinations(numbers, r=sample_size - 1):
         complement = goal_number - sum(sample)
         if complement in numbers:
