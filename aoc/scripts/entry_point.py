@@ -29,7 +29,7 @@ def cli():
 def solve(day, input_file=None):
     module = importlib.import_module(f"aoc.day{day}")
     if input_file:
-        utils.input_file_ctx.set(Path(input_file).absolute())
+        utils.input_file_ctx.set(Path(input_file).resolve())
     utils.day_ctx.set(day)
     module.main()
 
