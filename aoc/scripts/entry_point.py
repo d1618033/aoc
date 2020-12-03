@@ -6,6 +6,9 @@ import shutil
 import click
 import jinja2
 import requests
+from typeguard.importhook import install_import_hook
+
+install_import_hook("aoc")
 
 from aoc import utils
 from aoc.utils import get_day_from_file_name
