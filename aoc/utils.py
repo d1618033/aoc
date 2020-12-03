@@ -20,17 +20,17 @@ def _get_day_from_caller() -> typing.Optional[int]:
 
 
 def _get_file_path(
-    maybe_file_name: typing.Optional[str] = None, *, day: typing.Optional[int] = None
+    maybe_file_name: typing.Optional[str] = None, maybe_day: typing.Optional[int] = None
 ) -> str:
     file_name = Option(maybe_file_name).or_call(input_file_ctx.get).get_or("input")
     if os.path.isabs(file_name):
         return file_name
-    day = Option(day).or_call(day_ctx.get).or_call(_get_day_from_caller).get_or(1)
+    day = Option(maybe_day).or_call(day_ctx.get).or_call(_get_day_from_caller).get_or(1)
     return os.path.join(os.path.dirname(__file__), "..", "data", f"day{day}", file_name)
 
 
 def load_input(file_name=None, *, day=None):
-    with open(_get_file_path(file_name, day=day)) as file:
+    with open(_get_file_path(file_name, day)) as file:
         return file.read().splitlines()
 
 
