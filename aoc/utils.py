@@ -15,8 +15,12 @@ day_ctx = ContextVar("day", default=None)
 def _get_day_from_caller() -> typing.Optional[int]:
     for frame in inspect.stack():
         if "day" in frame.filename:
-            return int(unwrap(re.search(r"day(\d+)", frame.filename)).groups()[0])
+            return get_day_from_file_name(frame.filename)
     return None
+
+
+def get_day_from_file_name(file_name: str) -> int:
+    return int(unwrap(re.search(r"day(\d+)", file_name)).groups()[0])
 
 
 def _get_file_path(
