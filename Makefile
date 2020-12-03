@@ -14,7 +14,15 @@ test:
 test_day%:
 	pytest -s -vvv tests/day$*
 
-lint:
+pylint:
 	pylint $(FOLDERS)
+
+flake8:
 	flake8 $(FOLDERS)
-	mypy $(FOLDERS)
+
+mypy:
+	MYPYPATH=stubs mypy $(FOLDERS)
+
+lint: flake8 pylint mypy
+
+check: format lint test

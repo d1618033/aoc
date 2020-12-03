@@ -6,35 +6,31 @@ import typing
 from contextvars import ContextVar
 from functools import reduce
 
-input_file_ctx = ContextVar("input_file", default="input")
+from fn.monad import Option
+
+input_file_ctx = ContextVar("input_file", default=None)
 day_ctx = ContextVar("day", default=None)
 
 
-def get_file_path(
-    file_name: typing.Optional[str] = None, *, day: typing.Optional[int] = None
-) -> str:
-    if file_name is None:
-        file_name = input_file_ctx.get()
+def _get_day_from_caller() -> typing.Optional[int]:
+    for frame in inspect.stack():
+        if "day" in frame.filename:
+            return int(unwrap(re.search(r"day(\d+)", frame.filename)).groups()[0])
+    return None
 
+
+def _get_file_path(
+    maybe_file_name: typing.Optional[str] = None, *, day: typing.Optional[int] = None
+) -> str:
+    file_name = Option(maybe_file_name).or_call(input_file_ctx.get).get_or("input")
     if os.path.isabs(file_name):
         return file_name
-
-    if day is None:
-        day = day_ctx.get()
-        if day is None:
-            for frame in inspect.stack():
-                if "day" in frame.filename:
-                    day = int(
-                        unwrap(re.search(r"day(\d+)", frame.filename)).groups()[0]
-                    )
-                    break
-            else:
-                day = 1
+    day = Option(day).or_call(day_ctx.get).or_call(_get_day_from_caller).get_or(1)
     return os.path.join(os.path.dirname(__file__), "..", "data", f"day{day}", file_name)
 
 
 def load_input(file_name=None, *, day=None):
-    with open(get_file_path(file_name, day=day)) as file:
+    with open(_get_file_path(file_name, day=day)) as file:
         return file.read().splitlines()
 
 
