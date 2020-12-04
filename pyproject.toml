@@ -14,6 +14,7 @@ Jinja2 = "^2.11.2"
 requests = "^2.25.0"
 black = {version = "^20.8b1", allow-prereleases = true}
 typeguard = "^2.10.0"
+Logbook = "^1.5.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
@@ -21,6 +22,9 @@ pylint = "*"
 isort = "*"
 flake8 = "*"
 mypy = "*"
+traceback-with-variables = "^1.1.9"
+ipython = "^7.19.0"
+ipdb = "^0.13.4"
 
 [tool.poetry.scripts]
 aoc="aoc.scripts.entry_point:cli"

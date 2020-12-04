@@ -12,7 +12,7 @@ test:
 	pytest -s -vvv tests
 
 test_day%:
-	pytest -s -vvv tests/day$*
+	pytest -s -vvv tests/test_day$*.py
 
 pylint:
 	pylint $(FOLDERS)

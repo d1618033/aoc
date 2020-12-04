@@ -7,6 +7,7 @@ from functools import reduce
 from pathlib import Path
 from typing import Optional, TypeVar
 
+import logbook as logbook
 from fn.monad import Option
 
 input_file_ctx: ContextVar[Optional[Path]] = ContextVar("input_file", default=None)
@@ -16,6 +17,8 @@ day_ctx: ContextVar[Optional[int]] = ContextVar("day", default=None)
 MAIN_FOLDER: Path = Path(__file__).parent
 TESTS_FOLDER: Path = MAIN_FOLDER.parent / "tests"
 DATA_FOLDER: Path = MAIN_FOLDER.parent / "data"
+
+logger = logbook.Logger(__name__)
 
 
 @contextmanager
@@ -62,8 +65,8 @@ def _get_input_file_path(
     return Path(__file__).parent.parent.joinpath("data", f"day{day}", file_path)
 
 
-def load_input(file_path: Optional[Path] = None, *, day: Optional[int] = None):
-    return _get_input_file_path(file_path, day).read_text().splitlines()
+def load_input(file_path: Optional[Path] = None, *, day: Optional[int] = None, delim="\n"):
+    return _get_input_file_path(file_path, day).read_text().split(delim)
 
 
 class StringEnum(str, enum.Enum):
