@@ -42,9 +42,9 @@ class Height(BaseModel):
 
 
 class SimplePassportModel(BaseModel):
-    byr: int
-    iyr: int
-    eyr: int
+    byr: str
+    iyr: str
+    eyr: str
     hgt: str
     hcl: str
     ecl: str
