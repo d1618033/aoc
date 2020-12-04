@@ -7,7 +7,7 @@ from functools import reduce
 from pathlib import Path
 from typing import Optional, TypeVar
 
-import logbook as logbook
+import logbook
 from fn.monad import Option
 
 input_file_ctx: ContextVar[Optional[Path]] = ContextVar("input_file", default=None)
@@ -65,7 +65,9 @@ def _get_input_file_path(
     return Path(__file__).parent.parent.joinpath("data", f"day{day}", file_path)
 
 
-def load_input(file_path: Optional[Path] = None, *, day: Optional[int] = None, delim="\n"):
+def load_input(
+    file_path: Optional[Path] = None, *, day: Optional[int] = None, delim="\n"
+):
     return _get_input_file_path(file_path, day).read_text().split(delim)
 
 
@@ -91,3 +93,8 @@ def _compose2(f, g):
 
 def compose(*functions):
     return reduce(_compose2, functions)
+
+
+def raise_if_not(predicate, exception, *args, **kwargs):
+    if not predicate:
+        raise exception(*args, **kwargs)

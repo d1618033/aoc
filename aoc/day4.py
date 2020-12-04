@@ -1,10 +1,9 @@
 import re
-from typing import List, Optional, Set, Tuple
+from typing import Dict, Optional, Tuple, Type, cast
 
-from pydantic import BaseModel, Field, ValidationError, validator
-from traceback_with_variables import iter_tb_lines
+from pydantic import BaseModel, Field, ValidationError, validate_model, validator
 
-from aoc.utils import StringEnum, load_input, logger
+from aoc.utils import StringEnum, load_input, raise_if_not
 
 Color = str
 Id = str
@@ -19,12 +18,6 @@ class EyeColor(StringEnum):
     hazel = "hzl"
     other = "oth"
 
-    def __str__(self):
-        return self.value
-
-    def __repr__(self):
-        return repr(str(self))
-
 
 class Unit(StringEnum):
     centimeters = "cm"
@@ -35,8 +28,9 @@ class Height(BaseModel):
     unit: Unit
     value: int
 
+    @classmethod
     @validator("value")
-    def validate_value(cls, value, values, **kwargs):
+    def validate_value(cls, value, values):
         unit: Unit = values["unit"]
         if unit == unit.centimeters:
             raise_if_not(150 <= value <= 193, ValueError, f"Bad height {value} for cm")
@@ -45,12 +39,6 @@ class Height(BaseModel):
                 59 <= value <= 76, ValueError, f"Bad height {value} for inches"
             )
         return value
-
-    def __repr__(self):
-        return repr(str(self))
-
-    def __str__(self):
-        return f"{self.value}{self.unit.value}"
 
 
 class SimplePassportModel(BaseModel):
@@ -74,6 +62,7 @@ class AdvancedPassportModel(BaseModel):
     pid: Id = Field(regex=r"^\d{9}$")
     cid: Id = Field(default=None)
 
+    @classmethod
     @validator("hgt")
     def validate_height(cls, height_str):
         if match := re.match(r"^(?P<value>\d+)(?P<unit>in|cm)$", height_str):
@@ -81,45 +70,26 @@ class AdvancedPassportModel(BaseModel):
         raise ValueError(f"Unknown height format {height_str}")
 
 
-def try_else(func, exception=Exception, default=None, log_error=False, *args, **kwargs):
-    try:
-        return func(*args, **kwargs)
-    except exception as e:
-        if log_error:
-            logger.exception(f"Failed to run func {func}" + "\n".join(iter_tb_lines(e)))
-        return default
-    except Exception:
-        logger.exception(f"Failed to run func {func}")
-
-
-def raise_if_not(predicate, exception, *args, **kwargs):
-    if not predicate:
-        raise exception(*args, **kwargs)
-
-
-def parse_input(model):
+def validate_all_passports(model):
     raw_passports = load_input(delim="\n\n")
-    return [
-        try_else(
-            parse_single_passport,
-            exception=ValidationError,
-            default=None,
-            log_error=False,
-            raw_passport=raw_passport,
-            model=model,
-        )
-        for raw_passport in raw_passports
-    ]
+    return [validate_passport(model, raw_passport) for raw_passport in raw_passports]
 
 
-def parse_single_passport(raw_passport, model):
+def validate_passport(
+    model: Type[BaseModel], raw_passport: str
+) -> Optional[ValidationError]:
     items = re.split(r"\s+", raw_passport)
-    data = dict(item.split(":") for item in items if item)
-    return model(**data)
+    data: Dict[str, str] = dict(
+        cast(Tuple[str, str], item.split(":")) for item in items if item
+    )
+    _, _, errors = validate_model(model, data)
+    return errors
 
 
 def num_valid(model):
-    return sum(passport is not None for passport in parse_input(model))
+    return sum(
+        validation_errors is None for validation_errors in validate_all_passports(model)
+    )
 
 
 def part1():

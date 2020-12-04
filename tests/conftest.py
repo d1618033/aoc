@@ -1,5 +1,5 @@
-from pathlib import Path
 import sys
+from pathlib import Path
 
 import pytest
 from logbook import DEBUG, StreamHandler
@@ -18,4 +18,3 @@ def input_file(request):
     if marker := request.node.get_closest_marker("input_file"):
         file_name = marker.args[0]
     utils.input_file_ctx.set(Path(file_name))
-
