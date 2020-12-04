@@ -65,7 +65,7 @@ class SimplePassportModel(BaseModel):
 
 
 class AdvancedPassportModel(BaseModel):
-    byr: int = Field(ge=1920, le=2020)
+    byr: int = Field(ge=1920, le=2002)
     iyr: int = Field(ge=2010, le=2020)
     eyr: int = Field(ge=2020, le=2030)
     hgt: str
