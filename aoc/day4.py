@@ -69,14 +69,14 @@ class AdvancedPassportModel(BaseModel):
     iyr: int = Field(ge=2010, le=2020)
     eyr: int = Field(ge=2020, le=2030)
     hgt: str
-    hcl: Color = Field(regex=r"#[0-9a-f]{6}")
+    hcl: Color = Field(regex=r"^#[0-9a-f]{6}$")
     ecl: EyeColor
-    pid: Id = Field(regex=r"\d{9}")
+    pid: Id = Field(regex=r"^\d{9}$")
     cid: Id = Field(default=None)
 
     @validator("hgt")
     def validate_height(cls, height_str):
-        if match := re.match(r"(?P<value>\d+)(?P<unit>in|cm)", height_str):
+        if match := re.match(r"^(?P<value>\d+)(?P<unit>in|cm)$", height_str):
             return Height(**match.groupdict())
         raise ValueError(f"Unknown height format {height_str}")
 
@@ -104,7 +104,7 @@ def parse_input(model):
             parse_single_passport,
             exception=ValidationError,
             default=None,
-            log_error=True,
+            log_error=False,
             raw_passport=raw_passport,
             model=model,
         )

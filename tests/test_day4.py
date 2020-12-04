@@ -1,4 +1,5 @@
 import pytest
+from pydantic import ValidationError
 
 from aoc.day4 import (
     AdvancedPassportModel,
@@ -99,17 +100,9 @@ def test_part2():
     assert part2() == 4
 
 
-def test_parse_single_passport():
-    assert parse_single_passport(
-        "iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719",
-        AdvancedPassportModel,
-    ) == AdvancedPassportModel(
-        byr=1944,
-        iyr=2010,
-        eyr=2021,
-        hgt="158cm",
-        hcl="#b6652a",
-        ecl=EyeColor.blue,
-        pid="093154719",
-        cid=None,
-    )
+def test_hcl_exact_match():
+    with pytest.raises(ValidationError):
+        parse_single_passport(
+            "iyr:2010 hgt:158cm hcl:#b6652aZ ecl:blu byr:1944 eyr:2021 pid:093154719",
+            AdvancedPassportModel,
+        )
