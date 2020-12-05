@@ -56,7 +56,7 @@ def part2():
     max_seat = max(taken_seats)
     possible_seats = {
         seat
-        for row in range(max(min_seat.row, 1), min(max_seat.row, 2 ** 7 - 1))
+        for row in range(1, 2 ** 7 - 1)
         for col in range(8)
         if (seat := Seat(row=row, col=col)) >= min_seat and seat <= max_seat
     }
