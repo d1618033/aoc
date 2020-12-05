@@ -58,7 +58,7 @@ def part2():
         seat
         for row in range(1, 2 ** 7 - 1)
         for col in range(8)
-        if (seat := Seat(row=row, col=col)) >= min_seat and seat <= max_seat
+        if min_seat <= (seat := Seat(row=row, col=col)) <= max_seat
     }
     [your_seat] = possible_seats - taken_seats
     return your_seat.id
