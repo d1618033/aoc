@@ -1,10 +1,10 @@
 import itertools
 from math import prod
-from typing import Set, Tuple
+from typing import Final, Set, Tuple
 
 from aoc.utils import compose, load_input
 
-GOAL_NUMBER = 2020
+GOAL_NUMBER: Final = 2020
 
 
 def find_numbers_that_sum_to_goal(

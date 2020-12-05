@@ -5,9 +5,6 @@ from pydantic import BaseModel, Field, ValidationError, validate_model, validato
 
 from aoc.utils import StringEnum, load_input, raise_if_not
 
-Color = str
-Id = str
-
 
 class EyeColor(StringEnum):
     amber = "amb"
@@ -57,10 +54,10 @@ class AdvancedPassportModel(BaseModel):
     iyr: int = Field(ge=2010, le=2020)
     eyr: int = Field(ge=2020, le=2030)
     hgt: str
-    hcl: Color = Field(regex=r"^#[0-9a-f]{6}$")
+    hcl: str = Field(regex=r"^#[0-9a-f]{6}$")
     ecl: EyeColor
-    pid: Id = Field(regex=r"^\d{9}$")
-    cid: Id = Field(default=None)
+    pid: str = Field(regex=r"^\d{9}$")
+    cid: str = Field(default=None)
 
     @classmethod
     @validator("hgt")

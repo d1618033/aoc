@@ -5,7 +5,7 @@ from contextlib import ExitStack, contextmanager
 from contextvars import ContextVar
 from functools import reduce
 from pathlib import Path
-from typing import Optional, TypeVar
+from typing import Final, Optional, TypeVar
 
 import logbook
 from fn.monad import Option
@@ -14,11 +14,11 @@ input_file_ctx: ContextVar[Optional[Path]] = ContextVar("input_file", default=No
 day_ctx: ContextVar[Optional[int]] = ContextVar("day", default=None)
 
 
-MAIN_FOLDER: Path = Path(__file__).parent
-TESTS_FOLDER: Path = MAIN_FOLDER.parent / "tests"
-DATA_FOLDER: Path = MAIN_FOLDER.parent / "data"
+MAIN_FOLDER: Final[Path] = Path(__file__).parent
+TESTS_FOLDER: Final[Path] = MAIN_FOLDER.parent / "tests"
+DATA_FOLDER: Final[Path] = MAIN_FOLDER.parent / "data"
 
-logger = logbook.Logger(__name__)
+logger: Final = logbook.Logger(__name__)
 
 
 @contextmanager
