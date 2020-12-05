@@ -1,12 +1,4 @@
 [[package]]
-category = "dev"
-description = "Advanced Enumerations (compatible with Python's stdlib Enum), NamedTuples, and NamedConstants"
-name = "aenum"
-optional = false
-python-versions = "*"
-version = "2.2.4"
-
-[[package]]
 category = "main"
 description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 name = "appdirs"
@@ -406,7 +398,7 @@ wcwidth = "*"
 [[package]]
 category = "dev"
 description = "Run a subprocess in a pseudo terminal"
-marker = "python_version >= \"3.4\" and sys_platform != \"win32\" or sys_platform != \"win32\""
+marker = "python_version >= \"3.4\" and sys_platform != \"win32\" or sys_platform != \"win32\" or python_version >= \"3.4\" and sys_platform != \"win32\" and (python_version >= \"3.4\" and sys_platform != \"win32\" or sys_platform != \"win32\")"
 name = "ptyprocess"
 optional = false
 python-versions = "*"
@@ -624,15 +616,10 @@ python-versions = "*"
 version = "1.12.1"
 
 [metadata]
-content-hash = "2235a01d809ef318194c1af40d4c62cfdf8bb91ac0adc9b08c3f67b9a7f73c77"
+content-hash = "078f70d3dce665c7cc55408570fedf2df8e09ac7b0947895e90451c1acc55d6d"
 python-versions = "^3.8"
 
 [metadata.files]
-aenum = [
-    {file = "aenum-2.2.4-py2-none-any.whl", hash = "sha256:85adabd63183d283250bf7acd9fa23c7e45b1c8d1efbb84b233160f3c438dc18"},
-    {file = "aenum-2.2.4-py3-none-any.whl", hash = "sha256:bcb4fd350d36af336b6b5898e5d89f76344621d9c1b2de69c81acf1d3e6b1145"},
-    {file = "aenum-2.2.4.tar.gz", hash = "sha256:81828d1fbe20b6b188d75b21a0fa936d7d929d839ef843ef385d9c2a97082864"},
-]
 appdirs = [
     {file = "appdirs-1.4.4-py2.py3-none-any.whl", hash = "sha256:a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"},
     {file = "appdirs-1.4.4.tar.gz", hash = "sha256:7d5d0167b2b1ba821647616af46a749d1c653740dd0d2415100fe26e27afdf41"},

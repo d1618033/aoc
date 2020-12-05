@@ -1,9 +1,7 @@
 from dataclasses import dataclass
 from functools import total_ordering
 
-from aenum import MultiValueEnum
-
-from aoc.utils import load_input
+from aoc.utils import MultiValueEnum, load_input
 
 
 class Direction(MultiValueEnum):

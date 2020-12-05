@@ -75,6 +75,17 @@ class StringEnum(str, enum.Enum):
     pass
 
 
+class MultiValueEnum(enum.Enum):
+    def __new__(cls, *values):
+        obj = object.__new__(cls)
+        # first value is canonical value
+        obj._value_ = values[0]
+        for other_value in values[1:]:
+            cls._value2member_map_[other_value] = obj  # pylint: disable=no-member
+        obj._all_values = values
+        return obj
+
+
 GenericType = TypeVar("GenericType")
 
 
