@@ -1,4 +1,6 @@
-from aoc.day5 import Direction, binary_search, part1
+import pytest
+
+from aoc.day5 import Direction, binary_search, part1, part2
 
 
 def test_binary_search():
@@ -7,3 +9,8 @@ def test_binary_search():
 
 def test_part1():
     assert part1() == 820
+
+
+@pytest.mark.input_file("input")
+def test_part2():
+    assert part2() == 711

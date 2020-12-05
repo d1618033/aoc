@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from functools import total_ordering
 
 from aenum import MultiValueEnum
 
@@ -22,7 +23,8 @@ def binary_search(directions):
     return (low + high) // 2
 
 
-@dataclass
+@total_ordering
+@dataclass(frozen=True, eq=True)
 class Seat:
     row: int
     col: int
@@ -30,6 +32,9 @@ class Seat:
     @property
     def id(self):
         return 8 * self.row + self.col
+
+    def __gt__(self, other):
+        return self.id > other.id
 
 
 def get_seat(directions):
@@ -46,14 +51,17 @@ def part1():
 
 
 def part2():
-    all_seats = [[Seat(row, col) for col in range(8)] for row in range(2 ** 7)]
-    for seat in get_seats():
-        all_seats[seat.row][seat.col] = None
-    for row in all_seats[1:-1]:
-        for seat in row:
-            if seat is not None:
-                return seat.id
-    return None
+    taken_seats = set(get_seats())
+    min_seat = min(taken_seats)
+    max_seat = max(taken_seats)
+    possible_seats = {
+        seat
+        for row in range(max(min_seat.row, 1), min(max_seat.row, 2 ** 7 - 1))
+        for col in range(8)
+        if (seat := Seat(row=row, col=col)) >= min_seat and seat <= max_seat
+    }
+    [your_seat] = possible_seats - taken_seats
+    return your_seat.id
 
 
 def main():
