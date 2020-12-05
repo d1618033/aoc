@@ -27,13 +27,13 @@ class Seat:
     row: int
     col: int
 
+    @property
+    def id(self):
+        return 8 * self.row + self.col
+
 
 def get_seat(directions):
     return Seat(row=binary_search(directions[:7]), col=binary_search(directions[7:]))
-
-
-def get_seat_id(seat):
-    return 8 * seat.row + seat.col
 
 
 def get_seats():
@@ -42,7 +42,7 @@ def get_seats():
 
 
 def part1():
-    return max(get_seat_id(seat) for seat in get_seats())
+    return max(seat.id for seat in get_seats())
 
 
 def part2():
@@ -52,7 +52,7 @@ def part2():
     for row in all_seats[1:-1]:
         for seat in row:
             if seat is not None:
-                return get_seat_id(seat)
+                return seat.id
     return None
 
 
