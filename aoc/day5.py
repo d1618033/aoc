@@ -1,21 +1,13 @@
 from dataclasses import dataclass
-from enum import Enum
+
+from aenum import MultiValueEnum
 
 from aoc.utils import load_input
 
 
-class Direction(Enum):
-    higher = "higher"
-    lower = "lower"
-
-    @classmethod
-    def from_string(cls, string):
-        string = string.strip()
-        if string in ["F", "L"]:
-            return cls.lower
-        if string in ["B", "R"]:
-            return cls.higher
-        raise ValueError(string)
+class Direction(MultiValueEnum):
+    lower = "L", "F"
+    higher = "R", "B"
 
 
 def binary_search(directions):
@@ -46,7 +38,7 @@ def get_seat_id(seat):
 
 def get_seats():
     for row in load_input():
-        yield get_seat(list(map(Direction.from_string, row)))
+        yield get_seat(list(map(Direction, row)))
 
 
 def part1():
