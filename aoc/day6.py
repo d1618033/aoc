@@ -21,6 +21,7 @@ def part2():
         group_answers = defaultdict(int)
         people = group.split("\n")
         for person in people:
+            assert len(people)
             for answer in set(person.strip()):
                 group_answers[answer] += 1
         same_answers = [
