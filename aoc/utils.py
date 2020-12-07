@@ -96,9 +96,9 @@ class MultiValueEnum(enum.Enum):
 GenericType = TypeVar("GenericType")
 
 
-def unwrap(element: Optional[GenericType]) -> GenericType:
+def unwrap(element: Optional[GenericType], item: Optional[str] = "item") -> GenericType:
     if element is None:
-        raise ValueError("Unexpected None")
+        raise ValueError(f"{item} is unexpectedly None")
     return element
 
 
