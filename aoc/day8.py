@@ -1,13 +1,21 @@
+from copy import deepcopy
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional, List, Set, Tuple
+from typing import List
 
-from aoc.utils import load_input
+from aoc.utils import load_input, logger
 
 
-def part1():
-    data = load_input()
-    return run_program(data).value
+class Operation(Enum):
+    no_operation = "nop"
+    jump = "jmp"
+    accumulate = "acc"
+
+
+@dataclass
+class Instruction:
+    operation: Operation
+    arg: int
 
 
 class ProgramStatus(Enum):
@@ -21,43 +29,59 @@ class ProgramResult:
     value: int
 
 
-def run_program(data):
-    data = [line for line in data if line.strip()]
+def parse_line(line: str) -> Instruction:
+    op, arg = line.split(" ")
+    return Instruction(Operation(op.strip()), int(arg.strip()))
+
+
+def parse_program(data: List[str]) -> List[Instruction]:
+    return [parse_line(line) for line in data if line.strip()]
+
+
+def run_program(program: List[Instruction]) -> ProgramResult:
     value = 0
     current_instruction = 0
     seen_instructions = set()
-    while current_instruction < len(data):
+    while current_instruction < len(program):
         if current_instruction in seen_instructions:
-            print(f"{current_instruction} already seen")
+            logger.debug(f"{current_instruction} already seen")
             return ProgramResult(ProgramStatus.infinite_loop, value)
         seen_instructions.add(current_instruction)
-        instruction = data[current_instruction].strip()
-        op, arg = instruction.split(" ")
-        op = op.strip()
-        arg = int(arg.strip())
-        if op == "nop":
+        instruction = program[current_instruction]
+        if instruction.operation == Operation.no_operation:
             current_instruction += 1
             continue
-        if op == "acc":
-            value += arg
+        if instruction.operation == Operation.accumulate:
+            value += instruction.arg
             current_instruction += 1
-        elif op == "jmp":
-            current_instruction += arg
+        elif instruction.operation == Operation.jump:
+            current_instruction += instruction.arg
     return ProgramResult(ProgramStatus.exit, value)
 
 
-def part2():
-    data = load_input()
-    for i, instruction in enumerate(data):
-        if "nop" in instruction or "jmp" in instruction:
-            new_data = data.copy()
-            if "nop" in instruction:
-                new_data[i] = instruction.replace("nop", "jmp")
-            elif "jmp" in instruction:
-                new_data[i] = instruction.replace("jmp", "nop")
-            result = run_program(new_data)
+def part1() -> int:
+    program = parse_program(load_input())
+    return run_program(program).value
+
+
+def part2() -> int:
+    program = parse_program(load_input())
+    to_replace = {
+        Operation.no_operation: Operation.jump,
+        Operation.jump: Operation.no_operation,
+    }
+    for i, instruction in enumerate(program):
+        if instruction.operation in to_replace:
+            new_program = deepcopy(program)
+            new_program[i].operation = to_replace[instruction.operation]
+            logger.debug(
+                f"Trying to replace {i}:{instruction.operation}"
+                f" with {new_program[i].operation}"
+            )
+            result = run_program(new_program)
             if result.status == ProgramStatus.exit:
                 return result.value
+    raise AssertionError("One replacement should have fixed it")
 
 
 def main():
