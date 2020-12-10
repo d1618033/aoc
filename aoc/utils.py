@@ -71,11 +71,22 @@ def load_input(
     day: Optional[int] = None,
     delim="\n",
     strip=True,
+    skip_empty=True,
 ):
     lines = _get_input_file_path(file_path, day).read_text().split(delim)
     if strip:
-        return [line.strip() for line in lines]
+        lines = [line.strip() for line in lines]
+    if skip_empty:
+        lines = [line for line in lines if line]
     return lines
+
+
+def load_ints(    file_path: Optional[Path] = None,
+    *,
+    day: Optional[int] = None,
+    delim="\n"
+    ):
+    return list(map(int, load_input(file_path=file_path, day=day, delim=delim, strip=True)))
 
 
 class StringEnum(str, enum.Enum):
