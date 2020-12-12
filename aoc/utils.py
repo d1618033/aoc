@@ -81,12 +81,12 @@ def load_input(
     return lines
 
 
-def load_ints(    file_path: Optional[Path] = None,
-    *,
-    day: Optional[int] = None,
-    delim="\n"
-    ):
-    return list(map(int, load_input(file_path=file_path, day=day, delim=delim, strip=True)))
+def load_ints(
+    file_path: Optional[Path] = None, *, day: Optional[int] = None, delim="\n"
+):
+    return list(
+        map(int, load_input(file_path=file_path, day=day, delim=delim, strip=True))
+    )
 
 
 class StringEnum(str, enum.Enum):

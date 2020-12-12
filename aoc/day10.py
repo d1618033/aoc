@@ -1,7 +1,7 @@
 import functools
 from collections import Counter
 from dataclasses import dataclass
-from typing import Optional, List, Set, Tuple
+from typing import List, Optional, Set, Tuple
 
 from aoc.utils import load_input, load_ints
 
@@ -30,7 +30,9 @@ def get_arrangements(adapters):
     count = 0
     for i, adapter in enumerate(adapters):
         if 0 <= adapter <= 3:
-            count += get_arrangements(tuple([adapter_ - adapter for adapter_ in adapters[i+1:]]))
+            count += get_arrangements(
+                tuple([adapter_ - adapter for adapter_ in adapters[i + 1 :]])
+            )
         else:
             break
     return count
