@@ -59,6 +59,7 @@ def new(day=None, session=None):
     data_folder = DATA_FOLDER.joinpath(f"day{day}")
     data_folder.mkdir()
     download_input_for_day(day, session=session)
+    data_folder.joinpath("example").touch()
 
 
 def download_input_for_day(day, *, session=None):
