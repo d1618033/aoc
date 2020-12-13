@@ -1,85 +1,78 @@
-from functools import partial
+from dataclasses import dataclass
 from math import cos, pi, sin
-from turtle import Turtle
 
 from aoc.utils import load_input
 
 
-def part1():
-    turtle = Turtle()
+@dataclass
+class Location:
+    x: float
+    y: float
 
-    def move_in_direction(angle, amount):
-        heading = turtle.heading()
-        turtle.setheading(angle)
-        turtle.forward(amount)
-        turtle.setheading(heading)
+    def move(self, direction: "Direction", amount: float):
+        self.x, self.y = (
+            self.x + amount * direction.x,
+            self.y + amount * direction.y,
+        )
+
+
+@dataclass
+class Direction:
+    x: float
+    y: float
+
+    def tilt(self, angle):
+        rad = angle / 360 * 2 * pi
+        self.x, self.y = (
+            cos(rad) * self.x - sin(rad) * self.y,
+            sin(rad) * self.x + cos(rad) * self.y,
+        )
+
+    def increase(self, x=0, y=0):
+        self.x, self.y = (
+            self.x + x,
+            self.y + y,
+        )
+
+
+def part1():
+    ship = Location(0, 0)
+    direction = Direction(1, 0)
 
     op_to_method = {
-        "N": partial(move_in_direction, 90),
-        "S": partial(move_in_direction, 270),
-        "E": partial(move_in_direction, 0),
-        "W": partial(move_in_direction, 180),
-        "L": turtle.left,
-        "R": turtle.right,
-        "F": turtle.forward,
+        "N": lambda arg: ship.move(Direction(0, 1), arg),
+        "S": lambda arg: ship.move(Direction(0, -1), arg),
+        "E": lambda arg: ship.move(Direction(1, 0), arg),
+        "W": lambda arg: ship.move(Direction(-1, 0), arg),
+        "L": direction.tilt,
+        "R": lambda angle: direction.tilt(-angle),
+        "F": lambda arg: ship.move(direction, arg),
     }
-    turtle.speed(0)
-    turtle.setheading(0)
     for line in load_input():
         op = line[0]
         arg = int(line[1:])
         op_to_method[op](arg)
-        print(turtle.pos())
-    return sum(map(abs, turtle.pos()))
+    return sum(map(abs, [ship.x, ship.y]))
 
 
 def part2():
-    turtle = Turtle()
-    waypoint = Turtle()
-    turtle.getscreen().tracer(10000)
-    waypoint.getscreen().tracer(10000)
-
-    def move_in_direction_of_waypoint(amount):
-        pos = turtle.pos()
-        waypoint_pos = waypoint.pos()
-        new_pos = (pos[0] + waypoint_pos[0] * amount, pos[1] + waypoint_pos[1] * amount)
-        turtle.setpos(new_pos)
-
-    def move_waypoint_in_direction(angle, amount):
-        heading = waypoint.heading()
-        waypoint.setheading(angle)
-        waypoint.forward(amount)
-        waypoint.setheading(heading)
-
-    def tilt_waypoint(angle):
-        rad = angle / 360 * 2 * pi
-        print(angle, rad, sin(rad), cos(rad), waypoint.pos())
-        waypoint.setpos(
-            (
-                cos(rad) * waypoint.xcor() - sin(rad) * waypoint.ycor(),
-                sin(rad) * waypoint.xcor() + cos(rad) * waypoint.ycor(),
-            )
-        )
+    ship = Location(0, 0)
+    waypoint = Direction(10, 1)
 
     op_to_method = {
-        "N": partial(move_waypoint_in_direction, 90),
-        "S": partial(move_waypoint_in_direction, 270),
-        "E": partial(move_waypoint_in_direction, 0),
-        "W": partial(move_waypoint_in_direction, 180),
-        "L": tilt_waypoint,
-        "R": lambda angle: tilt_waypoint(-angle),
-        "F": move_in_direction_of_waypoint,
+        "N": lambda arg: waypoint.increase(y=arg),
+        "S": lambda arg: waypoint.increase(y=-arg),
+        "E": lambda arg: waypoint.increase(x=arg),
+        "W": lambda arg: waypoint.increase(x=-arg),
+        "L": waypoint.tilt,
+        "R": lambda angle: waypoint.tilt(-angle),
+        "F": lambda arg: ship.move(waypoint, arg),
     }
-    turtle.speed(0)
-    turtle.setheading(0)
-    waypoint.setheading(waypoint.towards((10, 1)))
-    waypoint.setpos((10, 1))
     for line in load_input():
         op = line[0]
         arg = int(line[1:])
         op_to_method[op](arg)
-        print(line, turtle.pos(), waypoint.pos())
-    return sum(map(abs, turtle.pos()))
+    return sum(map(abs, [ship.x, ship.y]))
 
 
 def main():
