@@ -4,7 +4,7 @@ from math import cos, pi, sin
 
 from fn.func import curried
 
-from aoc.utils import load_input, isub, iadd
+from aoc.utils import iadd, isub, load_input
 
 
 @dataclass
@@ -71,10 +71,10 @@ def part2():
     waypoint = Direction(10, 1)
 
     op_to_method = {
-        "N": iadd(waypoint, 'y'),
-        "S": isub(waypoint, 'y'),
-        "E": iadd(waypoint, 'x'),
-        "W": isub(waypoint, 'x'),
+        "N": iadd(waypoint, "y"),
+        "S": isub(waypoint, "y"),
+        "E": iadd(waypoint, "x"),
+        "W": isub(waypoint, "x"),
         "L": waypoint.left,
         "R": waypoint.right,
         "F": ship.move(waypoint),
