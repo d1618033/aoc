@@ -1,5 +1,9 @@
+# pylint: disable=no-value-for-parameter
+
 from dataclasses import dataclass
 from math import cos, pi, sin
+
+from fn.func import curried
 
 from aoc.utils import load_input
 
@@ -9,11 +13,16 @@ class Location:
     x: float
     y: float
 
-    def move(self, direction: "Direction", amount: float):
+    @curried
+    def move(self, direction, amount):
         self.x, self.y = (
             self.x + amount * direction.x,
             self.y + amount * direction.y,
         )
+
+    @property
+    def manhattan_distance(self):
+        return abs(self.x) + abs(self.y)
 
 
 @dataclass
@@ -28,6 +37,11 @@ class Direction:
             sin(rad) * self.x + cos(rad) * self.y,
         )
 
+    left = tilt
+
+    def right(self, angle):
+        return self.tilt(-angle)
+
     def increase(self, x=0, y=0):
         self.x, self.y = (
             self.x + x,
@@ -40,19 +54,23 @@ def part1():
     direction = Direction(1, 0)
 
     op_to_method = {
-        "N": lambda arg: ship.move(Direction(0, 1), arg),
-        "S": lambda arg: ship.move(Direction(0, -1), arg),
-        "E": lambda arg: ship.move(Direction(1, 0), arg),
-        "W": lambda arg: ship.move(Direction(-1, 0), arg),
-        "L": direction.tilt,
-        "R": lambda angle: direction.tilt(-angle),
-        "F": lambda arg: ship.move(direction, arg),
+        "N": ship.move(Direction(0, 1)),
+        "S": ship.move(Direction(0, -1)),
+        "E": ship.move(Direction(1, 0)),
+        "W": ship.move(Direction(-1, 0)),
+        "L": direction.left,
+        "R": direction.right,
+        "F": ship.move(direction),
     }
+    run_commands_on_input(op_to_method)
+    return ship.manhattan_distance
+
+
+def run_commands_on_input(op_to_method):
     for line in load_input():
         op = line[0]
         arg = int(line[1:])
         op_to_method[op](arg)
-    return sum(map(abs, [ship.x, ship.y]))
 
 
 def part2():
@@ -64,15 +82,12 @@ def part2():
         "S": lambda arg: waypoint.increase(y=-arg),
         "E": lambda arg: waypoint.increase(x=arg),
         "W": lambda arg: waypoint.increase(x=-arg),
-        "L": waypoint.tilt,
-        "R": lambda angle: waypoint.tilt(-angle),
-        "F": lambda arg: ship.move(waypoint, arg),
+        "L": waypoint.left,
+        "R": waypoint.right,
+        "F": ship.move(waypoint),
     }
-    for line in load_input():
-        op = line[0]
-        arg = int(line[1:])
-        op_to_method[op](arg)
-    return sum(map(abs, [ship.x, ship.y]))
+    run_commands_on_input(op_to_method)
+    return ship.manhattan_distance
 
 
 def main():
