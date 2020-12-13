@@ -1,5 +1,6 @@
 import enum
 import inspect
+import operator
 import re
 from contextlib import ExitStack, contextmanager
 from contextvars import ContextVar
@@ -131,10 +132,9 @@ def raise_if_not(predicate, exception, *args, **kwargs):
 
 
 @curried
-def isub(obj, attr, value):
-    setattr(obj, attr, getattr(obj, attr) - value)
+def obj_inplace_op(op, obj, attr, value):
+    setattr(obj, attr, op(getattr(obj, attr), value))
 
 
-@curried
-def iadd(obj, attr, value):
-    setattr(obj, attr, getattr(obj, attr) + value)
+iadd = obj_inplace_op(operator.iadd)
+isub = obj_inplace_op(operator.isub)
