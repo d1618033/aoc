@@ -1,11 +1,10 @@
 # pylint: disable=no-value-for-parameter
-
 from dataclasses import dataclass
 from math import cos, pi, sin
 
 from fn.func import curried
 
-from aoc.utils import load_input
+from aoc.utils import load_input, isub, iadd
 
 
 @dataclass
@@ -42,12 +41,6 @@ class Direction:
     def right(self, angle):
         return self.tilt(-angle)
 
-    def increase(self, x=0, y=0):
-        self.x, self.y = (
-            self.x + x,
-            self.y + y,
-        )
-
 
 def part1():
     ship = Location(0, 0)
@@ -78,10 +71,10 @@ def part2():
     waypoint = Direction(10, 1)
 
     op_to_method = {
-        "N": lambda arg: waypoint.increase(y=arg),
-        "S": lambda arg: waypoint.increase(y=-arg),
-        "E": lambda arg: waypoint.increase(x=arg),
-        "W": lambda arg: waypoint.increase(x=-arg),
+        "N": iadd(waypoint, 'y'),
+        "S": isub(waypoint, 'y'),
+        "E": iadd(waypoint, 'x'),
+        "W": isub(waypoint, 'x'),
         "L": waypoint.left,
         "R": waypoint.right,
         "F": ship.move(waypoint),

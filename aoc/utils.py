@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Final, Optional, TypeVar
 
 import logbook
+from fn.func import curried
 from fn.monad import Option
 
 input_file_ctx: ContextVar[Optional[Path]] = ContextVar("input_file", default=None)
@@ -127,3 +128,13 @@ def compose(*functions):
 def raise_if_not(predicate, exception, *args, **kwargs):
     if not predicate:
         raise exception(*args, **kwargs)
+
+
+@curried
+def isub(obj, attr, value):
+    setattr(obj, attr, getattr(obj, attr) - value)
+
+
+@curried
+def iadd(obj, attr, value):
+    setattr(obj, attr, getattr(obj, attr) + value)
