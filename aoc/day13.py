@@ -1,4 +1,4 @@
-from functools import reduce
+import math
 
 from aoc.utils import load_input
 
@@ -17,7 +17,7 @@ def part1():
 
 def chinese_remainder(n, a):
     sum_ = 0
-    prod = reduce(lambda a, b: a * b, n)
+    prod = math.prod(n)
     for n_i, a_i in zip(n, a):
         p = prod // n_i
         sum_ += a_i * mul_inv(p, n_i) * p
