@@ -136,5 +136,5 @@ def obj_inplace_op(op, obj, attr, value):
     setattr(obj, attr, op(getattr(obj, attr), value))
 
 
-iadd = obj_inplace_op(operator.iadd)
-isub = obj_inplace_op(operator.isub)
+iadd = obj_inplace_op(operator.iadd)  # pylint: disable=no-value-for-parameter
+isub = obj_inplace_op(operator.isub)  # pylint: disable=no-value-for-parameter
