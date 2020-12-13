@@ -16,7 +16,6 @@ black = {version = "^20.8b1", allow-prereleases = true}
 typeguard = "^2.10.0"
 Logbook = "^1.5.3"
 networkx = "^2.5"
-matplotlib = "^3.3.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
