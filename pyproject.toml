@@ -28,6 +28,7 @@ mypy = "*"
 traceback-with-variables = "^1.1.9"
 ipython = "^7.19.0"
 ipdb = "^0.13.4"
+autoflake = "^1.4"
 
 [tool.poetry.scripts]
 aoc="aoc.scripts.entry_point:cli"

@@ -1,9 +1,7 @@
 import functools
 from collections import Counter
-from dataclasses import dataclass
-from typing import List, Optional, Set, Tuple
 
-from aoc.utils import load_input, load_ints
+from aoc.utils import load_ints
 
 
 def diff(data):

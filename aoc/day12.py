@@ -1,8 +1,6 @@
-from dataclasses import dataclass
 from functools import partial
 from math import cos, pi, sin
 from turtle import Turtle
-from typing import Optional, List, Set, Tuple
 
 from aoc.utils import load_input
 
@@ -21,9 +19,9 @@ def part1():
         "S": partial(move_in_direction, 270),
         "E": partial(move_in_direction, 0),
         "W": partial(move_in_direction, 180),
-        "L": lambda arg: turtle.left(arg),
-        "R": lambda arg: turtle.right(arg),
-        "F": lambda arg: turtle.forward(arg),
+        "L": turtle.left,
+        "R": turtle.right,
+        "F": turtle.forward,
     }
     turtle.speed(0)
     turtle.setheading(0)
@@ -40,6 +38,7 @@ def part2():
     waypoint = Turtle()
     turtle.getscreen().tracer(10000)
     waypoint.getscreen().tracer(10000)
+
     def move_in_direction_of_waypoint(amount):
         pos = turtle.pos()
         waypoint_pos = waypoint.pos()
@@ -55,17 +54,19 @@ def part2():
     def tilt_waypoint(angle):
         rad = angle / 360 * 2 * pi
         print(angle, rad, sin(rad), cos(rad), waypoint.pos())
-        waypoint.setpos((
-            cos(rad) * waypoint.xcor() - sin(rad) * waypoint.ycor(),
-            sin(rad) * waypoint.xcor() + cos(rad) * waypoint.ycor()
-        ))
+        waypoint.setpos(
+            (
+                cos(rad) * waypoint.xcor() - sin(rad) * waypoint.ycor(),
+                sin(rad) * waypoint.xcor() + cos(rad) * waypoint.ycor(),
+            )
+        )
 
     op_to_method = {
         "N": partial(move_waypoint_in_direction, 90),
         "S": partial(move_waypoint_in_direction, 270),
         "E": partial(move_waypoint_in_direction, 0),
         "W": partial(move_waypoint_in_direction, 180),
-        "L": lambda angle: tilt_waypoint(angle),
+        "L": tilt_waypoint,
         "R": lambda angle: tilt_waypoint(-angle),
         "F": move_in_direction_of_waypoint,
     }

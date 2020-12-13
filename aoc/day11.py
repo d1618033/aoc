@@ -1,8 +1,6 @@
-import functools
 from collections import Counter
-from copy import deepcopy
 from dataclasses import dataclass
-from typing import List, Optional, Set, Tuple
+from typing import List
 
 from aoc.utils import StringEnum, load_input
 
@@ -30,7 +28,8 @@ class Board:
             for row, tiles_in_row in enumerate(tiles)
         ]
 
-    def _get_directions(self):
+    @staticmethod
+    def _get_directions():
         for i in range(-1, 2):
             for j in range(-1, 2):
                 if i == 0 and j == 0:
