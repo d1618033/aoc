@@ -20,16 +20,24 @@ def find_numbers_that_sum_to_goal(
 multiply_numbers_that_sum_to_goal = compose(prod, find_numbers_that_sum_to_goal)
 
 
-def part1(numbers):
+def load_data():
+    return {int(line) for line in load_input()}
+
+
+def part1(numbers=None):
+    if numbers is None:
+        numbers = load_data()
     return multiply_numbers_that_sum_to_goal(numbers, sample_size=2)
 
 
-def part2(numbers):
+def part2(numbers=None):
+    if numbers is None:
+        numbers = load_data()
     return multiply_numbers_that_sum_to_goal(numbers, sample_size=3)
 
 
 def main():
-    numbers = {int(line) for line in load_input()}
+    numbers = load_data()
     print("part1", part1(numbers))
     print("part2", part2(numbers))
 

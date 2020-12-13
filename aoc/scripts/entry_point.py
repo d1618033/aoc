@@ -22,14 +22,20 @@ def cli():
 
 
 @cli.command()
-@click.argument("day")
+@click.option("--day", default=None)
+@click.option("--part", default=None)
 @click.option("--input", "input_file", default=None)
-def solve(day, input_file=None):
+def solve(day=None, part=None, input_file=None):
+    if day is None:
+        day = get_last_day()
     if input_file is not None:
         input_file = Path(input_file).resolve()
     with setting_defaults(input_file=input_file, day=day):
         module = importlib.import_module(f"aoc.day{day}")
-        module.main()
+        if part:
+            print(getattr(module, f"part{part}")())
+        else:
+            module.main()
 
 
 @cli.command()
