@@ -1,27 +1,49 @@
+from dataclasses import dataclass
+from typing import List
+
 from sympy.ntheory.modular import crt
 
 from aoc.utils import load_input
 
 
-def part1():
+@dataclass
+class Bus:
+    id: int
+    index: int
+
+
+@dataclass
+class Data:
+    arrival: int
+    buses: List[Bus]
+
+
+def load_data():
     data = load_input()
     arrival = int(data[0])
-    buses = [int(bus) for bus in data[1].split(",") if bus != "x"]
+    buses = [
+        Bus(id=int(bus), index=i)
+        for i, bus in enumerate(data[1].split(","))
+        if bus != "x"
+    ]
+    return Data(arrival=arrival, buses=buses)
+
+
+def part1():
+    data = load_data()
 
     def minutes_to_wait(bus):
-        return bus - arrival % bus
+        return bus.id - data.arrival % bus.id
 
-    bus = min(buses, key=minutes_to_wait)
-    return bus * minutes_to_wait(bus)
+    bus = min(data.buses, key=minutes_to_wait)
+    return bus.id * minutes_to_wait(bus)
 
 
 def part2():
-    buses = [
-        (int(bus), i) for i, bus in enumerate(load_input()[1].split(",")) if bus != "x"
-    ]
+    data = load_data()
     return crt(
-        [bus[0] for bus in buses],
-        [bus[0] - bus[1] for bus in buses],
+        [bus.id for bus in data.buses],
+        [bus.id - bus.index for bus in data.buses],
     )[0]
 
 
