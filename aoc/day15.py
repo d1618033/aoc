@@ -22,14 +22,17 @@ def number_game(starting_numbers):
         yield current_number
 
 
-def part1():
+def get_number_at(index):
     starting_numbers = load_ints(delim=",")
-    return next(islice(number_game(starting_numbers), 2020 - 1, 2020))
+    return next(islice(number_game(starting_numbers), index - 1, index))
+
+
+def part1():
+    return get_number_at(2020)
 
 
 def part2():
-    starting_numbers = load_ints(delim=",")
-    return next(islice(number_game(starting_numbers), 30000000 - 1, 30000000))
+    return get_number_at(30000000)
 
 
 def main():

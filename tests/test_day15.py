@@ -9,7 +9,3 @@ def test_number_game():
 
 def test_part1():
     assert part1() == 436
-
-
-def test_part2():
-    assert part2() is None
