@@ -37,8 +37,6 @@ class ProgramVersion2(Program):
         location_binary = self.pad(location)
         mask = self._mask
         for i, mask_i in enumerate(mask):
-            if mask_i == "0":
-                continue
             if mask_i == "1":
                 location_binary[i] = "1"
 
@@ -55,7 +53,7 @@ class ProgramVersion2(Program):
             for bit in range(2):
                 new_location_binary = location_binary.copy()
                 new_location_binary[index] = str(bit)
-                yield from (self.gen_all_values(new_location_binary, index + 1))
+                yield from self.gen_all_values(new_location_binary, index + 1)
         else:
             yield from self.gen_all_values(location_binary, index + 1)
 
