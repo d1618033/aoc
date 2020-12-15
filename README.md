@@ -16,7 +16,7 @@ pip install git+https://github.com/d1618033/aoc.git
 To run the solution for a particular day:
 
 ```
-aoc solve <day_number> --input <your_file>
+aoc solve [--day <day_number>] [--part <part>] [--input <your_file>]
 ```
 
 ## Development
