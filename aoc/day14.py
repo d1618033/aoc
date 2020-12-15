@@ -61,7 +61,6 @@ class ProgramVersion2(Program):
 
 
 def run(program):
-    print()
     lines = load_input()
     methods = {
         r"^mem\[(?P<location>\d+)\]\s*=\s*(?P<value>\d+)$": program.write,
