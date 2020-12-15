@@ -1,6 +1,6 @@
 from itertools import islice
 
-from aoc.day15 import part1, part2, number_game
+from aoc.day15 import number_game, part1, part2
 
 
 def test_number_game():
