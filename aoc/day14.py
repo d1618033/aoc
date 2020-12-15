@@ -63,11 +63,14 @@ class ProgramVersion2(Program):
 def run(program):
     print()
     lines = load_input()
+    methods = {
+        r"^mem\[(?P<location>\d+)\]\s*=\s*(?P<value>\d+)$": program.write,
+        r"^mask\s+=\s+(?P<mask>[X01]+)$": program.set_mask,
+    }
     for line in lines:
-        if m := re.match(r"^mem\[(?P<location>\d+)\]\s*=\s*(?P<value>\d+)$", line):
-            program.write(**m.groupdict())
-        elif m := re.match(r"^mask\s+=\s+(?P<mask>[X01]+)$", line):
-            program.set_mask(**m.groupdict())
+        for pattern, method in methods.items():
+            if m := re.match(pattern, line):
+                method(**m.groupdict())
     return program.sum
 
 
