@@ -1,5 +1,6 @@
 import functools
 import itertools
+import operator
 from typing import Tuple
 
 from aoc.utils import load_input
@@ -28,9 +29,7 @@ class InfiniteGameOfLifeBoard:
         for diff in itertools.product([-1, 0, 1], repeat=self._dimensions):
             if all(d == 0 for d in diff):
                 continue
-            neighbors.add(
-                tuple(coordinate + d for coordinate, d in zip(location, diff))
-            )
+            neighbors.add(tuple(map(operator.add, location, diff)))
         return neighbors
 
     def iter_locations(self):
@@ -63,7 +62,7 @@ class InfiniteGameOfLifeBoard:
         return self._active
 
 
-def get_num_activate_after_steps(dimensions, num_steps):
+def get_num_active_after_steps(dimensions, num_steps):
     board = load_board(dimensions=dimensions)
     for _ in range(num_steps):
         board.step()
@@ -71,7 +70,7 @@ def get_num_activate_after_steps(dimensions, num_steps):
 
 
 def part1():
-    return get_num_activate_after_steps(dimensions=3, num_steps=6)
+    return get_num_active_after_steps(dimensions=3, num_steps=6)
 
 
 def load_board(dimensions=3):
@@ -85,7 +84,7 @@ def load_board(dimensions=3):
 
 
 def part2():
-    return get_num_activate_after_steps(dimensions=4, num_steps=6)
+    return get_num_active_after_steps(dimensions=4, num_steps=6)
 
 
 def main():
