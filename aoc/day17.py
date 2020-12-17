@@ -43,12 +43,15 @@ class InfiniteGameOfLifeBoard:
     def num_active_neighbors(self, location):
         return len(self.get_neighbors(location) & self._active)
 
+    def activate(self, location):
+        return (
+            self.num_active_neighbors(location)
+            in self._num_neighbors_to_activate[location in self._active]
+        )
+
     def step(self):
         self._active = {
-            location
-            for location in self.iter_locations()
-            if self.num_active_neighbors(location)
-            in self._num_neighbors_to_activate[location in self._active]
+            location for location in self.iter_locations() if self.activate(location)
         }
 
     @property
