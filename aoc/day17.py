@@ -11,6 +11,7 @@ class InfiniteGameOfLifeBoard:
     def __init__(self, dimensions=3):
         self._dimensions = dimensions
         self._active = set()
+        self._num_neighbors_to_activate = {False: [3], True: [2, 3]}
 
     def set_active(self, location: Location, value: bool):
         if value:
@@ -39,13 +40,15 @@ class InfiniteGameOfLifeBoard:
             for neighbor in self.get_neighbors(location)
         )
 
+    def num_active_neighbors(self, location):
+        return len(self.get_neighbors(location) & self._active)
+
     def step(self):
-        num_neighbors_to_activate = {False: [3], True: [2, 3]}
         self._active = {
             location
             for location in self.iter_locations()
-            if len(self.get_neighbors(location) & self._active)
-            in num_neighbors_to_activate[location in self._active]
+            if self.num_active_neighbors(location)
+            in self._num_neighbors_to_activate[location in self._active]
         }
 
     @property
