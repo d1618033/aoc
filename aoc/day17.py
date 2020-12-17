@@ -23,34 +23,30 @@ class InfiniteGameOfLifeBoard:
 
     @functools.lru_cache
     def get_neighbors(self, location: Location):
-        neighbors = []
+        neighbors = set()
         for diff in itertools.product([-1, 0, 1], repeat=self._dimensions):
             if all(d == 0 for d in diff):
                 continue
-            neighbors.append(
+            neighbors.add(
                 tuple(coordinate + d for coordinate, d in zip(location, diff))
             )
         return neighbors
 
     def iter_locations(self):
-        return (
-            self._active
-            | set(
-                neighbor
-                for location in self._active
-                for neighbor in self.get_neighbors(location)
-            )
+        return self._active | set(
+            neighbor
+            for location in self._active
+            for neighbor in self.get_neighbors(location)
         )
 
     def step(self):
-        changes = []
-        for location in self.iter_locations():
-            num_active_neighbors = len(set(self.get_neighbors(location)) & self._active)
-            if location in self._active:
-                changes.append((location, num_active_neighbors in [2, 3]))
-            else:
-                changes.append((location, num_active_neighbors == 3))
-        self._active = {location for location, activate in changes if activate}
+        num_neighbors_to_activate = {False: [3], True: [2, 3]}
+        self._active = {
+            location
+            for location in self.iter_locations()
+            if len(self.get_neighbors(location) & self._active)
+            in num_neighbors_to_activate[location in self._active]
+        }
 
     @property
     def total_active(self):
