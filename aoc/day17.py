@@ -50,9 +50,7 @@ class InfiniteGameOfLifeBoard:
                 changes.append((location, num_active_neighbors in [2, 3]))
             else:
                 changes.append((location, num_active_neighbors == 3))
-        self._active = (
-            self._active | {location for location, activate in changes if activate}
-        ) - {location for location, activate in changes if not activate}
+        self._active = {location for location, activate in changes if activate}
 
     @property
     def total_active(self):
