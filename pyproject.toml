@@ -17,6 +17,7 @@ typeguard = "^2.10.0"
 Logbook = "^1.5.3"
 networkx = "^2.5"
 sympy = "^1.7.1"
+Arpeggio = "^1.10.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
