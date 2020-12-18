@@ -45,31 +45,15 @@ def calc_part_2():
 
 class CalcVisitorPart1(PTNodeVisitor):
     def visit_number(self, node, _):
-        """
-        Converts node value to float.
-        """
-        if self.debug:
-            print("Converting {}.".format(node.value))
         return float(node.value)
 
     def visit_factor(self, _, children):
-        """
-        Applies a sign to the expression or number.
-        """
-        if self.debug:
-            print("Factor {}".format(children))
         if len(children) == 1:
             return children[0]
         sign = -1 if children[0] == "-" else 1
         return sign * children[-1]
 
     def visit_expression(self, _, children):
-        """
-        Adds or subtracts terms.
-        Term nodes will be already evaluated.
-        """
-        if self.debug:
-            print("Expression {}".format(children))
         expr = children[0]
         operators = {
             "+": operator.add,
@@ -79,8 +63,6 @@ class CalcVisitorPart1(PTNodeVisitor):
         }
         for i in range(2, len(children), 2):
             expr = operators[children[i - 1]](expr, children[i])
-        if self.debug:
-            print("Expression = {}".format(expr))
         return expr
 
 
