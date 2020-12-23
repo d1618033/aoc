@@ -1,11 +1,14 @@
+from collections import deque
 from dataclasses import dataclass
-from typing import Optional, List, Set, Tuple
+from typing import List, Optional, Set, Tuple
 
 from aoc.utils import load_input
-from collections import deque
+
 
 def part1():
-    player1, player2 = [deque(map(int, player.splitlines()[1:])) for player in load_input(delim="\n\n")]
+    player1, player2 = [
+        deque(map(int, player.splitlines()[1:])) for player in load_input(delim="\n\n")
+    ]
     assert isinstance(player1, deque)
     assert isinstance(player2, deque)
     while player1 and player2:
@@ -40,7 +43,11 @@ def recurisve_combat(player1, player2, game=1):
         card2 = player2.popleft()
         # print(f"Card1: {card1}, Card2: {card2}")
         if card1 <= len(player1) and card2 <= len(player2):
-            winner = recurisve_combat(deque(list(player1)[:card1]), deque(list(player2)[:card2]), game=game + 1)
+            winner = recurisve_combat(
+                deque(list(player1)[:card1]),
+                deque(list(player2)[:card2]),
+                game=game + 1,
+            )
         else:
             winner = 1 if card1 > card2 else 2
         if winner == 1:
@@ -52,10 +59,11 @@ def recurisve_combat(player1, player2, game=1):
 
 
 def part2():
-    player1, player2 = [deque(map(int, player.splitlines()[1:])) for player in load_input(delim="\n\n")]
+    player1, player2 = [
+        deque(map(int, player.splitlines()[1:])) for player in load_input(delim="\n\n")
+    ]
     winner = recurisve_combat(player1, player2)
     return get_score(player1 if winner == 1 else player2)
-
 
 
 def main():

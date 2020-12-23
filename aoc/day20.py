@@ -2,11 +2,11 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from math import prod
 from textwrap import dedent
-from typing import Optional, List, Set, Tuple, Dict
+from typing import Dict, List, Optional, Set, Tuple
 
 from more_itertools import flatten
 
-from aoc.utils import load_input, StringEnum
+from aoc.utils import StringEnum, load_input
 
 
 @dataclass
@@ -57,7 +57,9 @@ def load_data():
         if not lines:
             continue
         id_line = int(lines[0].replace("Tile ", "").replace(":", ""))
-        image_parts.append(ImagePart(id=id_line, data=[[col for col in row] for row in lines[1:]]))
+        image_parts.append(
+            ImagePart(id=id_line, data=[[col for col in row] for row in lines[1:]])
+        )
     return image_parts
 
 
@@ -67,10 +69,7 @@ def part1():
     all_sides = defaultdict(set)
     for image_part in image_parts:
         for side_name, side in image_part.sides:
-            for is_flipped, flip in [
-                (False, side),
-                (True, tuple(reversed(side)))
-            ]:
+            for is_flipped, flip in [(False, side), (True, tuple(reversed(side)))]:
                 all_sides[flip].add(image_part.id)
     matches = defaultdict(set)
     for side, image_parts in all_sides.items():
@@ -79,9 +78,7 @@ def part1():
             matches[a].add(b)
             matches[b].add(a)
     corners = [
-        image_part_id
-        for image_part_id, matches in matches.items()
-        if len(matches) == 2
+        image_part_id for image_part_id, matches in matches.items() if len(matches) == 2
     ]
     assert len(corners) == 4
     return prod(corners)
@@ -91,19 +88,13 @@ def rotate(image):
     num_columns = len(image)
     num_rows = len(image[0])
     return [
-        list(reversed([
-            image[j][i]
-            for j in range(num_columns)
-        ]))
+        list(reversed([image[j][i] for j in range(num_columns)]))
         for i in range(num_rows)
     ]
 
 
 def fliph(image):
-    return [
-        list(reversed(row))
-        for row in image
-    ]
+    return [list(reversed(row)) for row in image]
 
 
 def flipv(image):
@@ -149,10 +140,22 @@ def get_rotation(side, other_side):
 
 
 def get_full_image():
-    complement_side = {"left": "right", "right": "left", "top": "bottom", "bottom": "top"}
+    complement_side = {
+        "left": "right",
+        "right": "left",
+        "top": "bottom",
+        "bottom": "top",
+    }
 
     image_parts = load_data()
-    assert set(Counter(tuple(reversed(side)) if rev else tuple(side) for img in image_parts for _, side in img.sides for rev in [True, False]).values()) <= {1, 2}
+    assert set(
+        Counter(
+            tuple(reversed(side)) if rev else tuple(side)
+            for img in image_parts
+            for _, side in img.sides
+            for rev in [True, False]
+        ).values()
+    ) <= {1, 2}
 
     images_to_check = [image_parts[0]]
     images_already_checked = []
@@ -177,39 +180,37 @@ def get_full_image():
                 assert getattr(image, side) == getattr(other_image, other_side)
                 other_side = complement_side[side]
                 if side in image.attached:
-                    print(f"Image {image.id} already attached at side {side} to {image.attached[side].id}, can't attach now {other_image.id}")
+                    print(
+                        f"Image {image.id} already attached at side {side} to {image.attached[side].id}, can't attach now {other_image.id}"
+                    )
                     continue
                 image.attached[side] = other_image
-                assert other_side not in other_image.attached, f"other {other_image.id} already attached at side {other_side} to {other_image.attached[other_side].id}"
+                assert (
+                    other_side not in other_image.attached
+                ), f"other {other_image.id} already attached at side {other_side} to {other_image.attached[other_side].id}"
                 other_image.attached[other_side] = image
-                if other_image not in images_to_check and other_image not in images_already_checked:
+                if (
+                    other_image not in images_to_check
+                    and other_image not in images_already_checked
+                ):
                     images_to_check.append(other_image)
         images_already_checked.append(image)
-
-
 
     for im in image_parts:
         for side, other_im in im.attached.items():
             assert getattr(im, side) == getattr(other_im, complement_side[side])
 
-    corners = [
-        im
-        for im in image_parts
-        if len(im.attached) == 2
-    ]
+    corners = [im for im in image_parts if len(im.attached) == 2]
     assert len(corners) == 4
 
     full_image_size = int(len(image_parts) ** 0.5)
 
-    borders = [
-        im
-        for im in image_parts
-        if len(im.attached) == 3
-    ]
+    borders = [im for im in image_parts if len(im.attached) == 3]
     assert len(borders) == (full_image_size - 2) * 4, len(borders)
 
-
-    full_image: List[List[ImagePart]] = [[None for _ in range(full_image_size)] for _ in range(full_image_size)]
+    full_image: List[List[ImagePart]] = [
+        [None for _ in range(full_image_size)] for _ in range(full_image_size)
+    ]
     for corner in corners:
         if set(corner.attached.keys()) == {"bottom", "right"}:
             full_image[0][0] = corner
@@ -234,7 +235,7 @@ def get_full_image():
                 assert isinstance(image, ImagePart)
                 print(i, j, image.id, image.attached.keys())
                 if left := image.attached.get("left"):
-                    full_image[i][j-1] = left
+                    full_image[i][j - 1] = left
                 if right := image.attached.get("right"):
                     full_image[i][j + 1] = right
                 if top := image.attached.get("top"):
@@ -259,7 +260,9 @@ def get_full_image():
     assert full_image[1][2].left == full_image[1][1].right
     assert full_image[2][2].left == full_image[2][1].right
 
-    assert full_image[1][1].right == full_image[1][2].left, f"{full_image[1][1].right} == {full_image[1][2].left}"
+    assert (
+        full_image[1][1].right == full_image[1][2].left
+    ), f"{full_image[1][1].right} == {full_image[1][2].left}"
     assert full_image[1][1].bottom == full_image[2][1].top
 
     full_image_concatenated = []
@@ -274,60 +277,66 @@ def get_full_image():
 
 def get_full_image_no_borders():
     image = get_full_image()
+
     def is_not_border(j):
         return j % 10 not in [9, 0]
+
     return [
-        [
-            col
-            for j, col in enumerate(row)
-            if is_not_border(j)
-        ]
+        [col for j, col in enumerate(row) if is_not_border(j)]
         for i, row in enumerate(image)
         if is_not_border(i)
     ]
 
 
 def print_image(image):
-    print('\n'.join(''.join(row) for row in image))
+    print("\n".join("".join(row) for row in image))
 
 
 def part2():
     image = get_full_image_no_borders()
-    sea_monster = [list(row) for row in dedent("""
+    sea_monster = [
+        list(row)
+        for row in dedent(
+            """
         __________________#_
         #____##____##____###
         _#__#__#__#__#__#___
-    """).strip().splitlines()]
+    """
+        )
+        .strip()
+        .splitlines()
+    ]
     assert len(set(len(row) for row in sea_monster)) == 1
     assert len(sea_monster) == 3
 
     def equal_to_sea_monster(i, j):
         part_of_image = [
-            row[j:j+len(sea_monster[0])]
-            for row in image[i:i+len(sea_monster)]
+            row[j : j + len(sea_monster[0])] for row in image[i : i + len(sea_monster)]
         ]
         assert len(part_of_image) == len(sea_monster)
-        assert len(part_of_image[0]) == len(sea_monster[0]), f"{len(part_of_image[0])} == {len(sea_monster[0])}"
+        assert len(part_of_image[0]) == len(
+            sea_monster[0]
+        ), f"{len(part_of_image[0])} == {len(sea_monster[0])}"
         for i, row in enumerate(part_of_image):
             for j, col in enumerate(row):
-                if sea_monster[i][j] == '_':
-                    part_of_image[i][j] = '_'
+                if sea_monster[i][j] == "_":
+                    part_of_image[i][j] = "_"
         print_image(part_of_image)
         print()
         return part_of_image == sea_monster
 
-
     def fill_in_sea_monster(i, j):
         part_of_image = [
-            row[j:j+len(sea_monster[0])]
-            for row in image[i:i+len(sea_monster)]
+            row[j : j + len(sea_monster[0])] for row in image[i : i + len(sea_monster)]
         ]
         assert len(part_of_image) == len(sea_monster)
-        assert len(part_of_image[0]) == len(sea_monster[0]), f"{len(part_of_image[0])} == {len(sea_monster[0])}"
+        assert len(part_of_image[0]) == len(
+            sea_monster[0]
+        ), f"{len(part_of_image[0])} == {len(sea_monster[0])}"
         for i_, row in enumerate(part_of_image):
             for j_, col in enumerate(row):
-                if sea_monster[i_][j_] != '_':
-                    image[i+i_][j+j_] = 'O'
+                if sea_monster[i_][j_] != "_":
+                    image[i + i_][j + j_] = "O"
 
     # image = rotate(image)
     # print_image(image)
@@ -355,9 +364,7 @@ def part2():
             for i, j in monsters:
                 fill_in_sea_monster(i, j)
             break
-    return len([element for element in flatten(image) if element == '#'])
-
-
+    return len([element for element in flatten(image) if element == "#"])
 
 
 def main():

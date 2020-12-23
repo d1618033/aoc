@@ -2,7 +2,7 @@ from collections import defaultdict
 from copy import deepcopy
 from dataclasses import dataclass
 from functools import reduce
-from typing import Optional, List, Set, Tuple
+from typing import List, Optional, Set, Tuple
 
 from aoc.utils import load_input
 
@@ -27,8 +27,17 @@ def load_data():
 def part1():
     foods = load_data()
     allergen_to_ingredients = get_allergen_to_ingredients(foods)
-    ingredients_that_might_contain_allergen = reduce(set.union, allergen_to_ingredients.values())
-    return len([ingredient for food in foods for ingredient in food.ingredients if ingredient not in ingredients_that_might_contain_allergen])
+    ingredients_that_might_contain_allergen = reduce(
+        set.union, allergen_to_ingredients.values()
+    )
+    return len(
+        [
+            ingredient
+            for food in foods
+            for ingredient in food.ingredients
+            if ingredient not in ingredients_that_might_contain_allergen
+        ]
+    )
 
 
 def get_allergen_to_ingredients(foods):
@@ -38,8 +47,10 @@ def get_allergen_to_ingredients(foods):
         for allergen in food.allergens:
             allergen_to_foods[allergen].append(food)
     for allergen, foods_ in allergen_to_foods.items():
-        allergen_to_ingredients[allergen] = reduce(set.intersection, [set(food.ingredients) for food in foods if
-                                                                      allergen in food.allergens])
+        allergen_to_ingredients[allergen] = reduce(
+            set.intersection,
+            [set(food.ingredients) for food in foods if allergen in food.allergens],
+        )
     any_changes = True
     while any_changes:
         any_changes = False
@@ -62,12 +73,16 @@ def get_allergen_to_ingredients(foods):
 def part2():
     foods = load_data()
     allergen_to_ingredients = get_allergen_to_ingredients(foods)
-    definite_allergen_ingredients = [(allergen, list(ingredients)[0]) for allergen, ingredients in
-                              allergen_to_ingredients.items() if len(ingredients) == 1]
-    string = ",".join(map(lambda x: x[1], sorted(definite_allergen_ingredients, key=lambda x: x[0])))
+    definite_allergen_ingredients = [
+        (allergen, list(ingredients)[0])
+        for allergen, ingredients in allergen_to_ingredients.items()
+        if len(ingredients) == 1
+    ]
+    string = ",".join(
+        map(lambda x: x[1], sorted(definite_allergen_ingredients, key=lambda x: x[0]))
+    )
     assert " " not in string
     return string
-
 
 
 def main():

@@ -1,7 +1,17 @@
 from textwrap import dedent
 
-from aoc.day20 import part1, part2, rotate, flipv, get_rotation, fliph, get_full_image, load_data, get_match, \
-    get_full_image_no_borders
+from aoc.day20 import (
+    fliph,
+    flipv,
+    get_full_image,
+    get_full_image_no_borders,
+    get_match,
+    get_rotation,
+    load_data,
+    part1,
+    part2,
+    rotate,
+)
 
 
 def test_part1():
@@ -61,10 +71,12 @@ def test_get_rotation():
     assert get_rotation("left", "top") == 1
     assert get_rotation("left", "bottom") == 3
 
+
 def test_get_full_image():
     image = flipv(get_full_image())
     print("\n".join("".join(row) for row in image))
-    expected_str = dedent("""
+    expected_str = dedent(
+        """
     #...##.#....###..####.#.#####.
     ..#.#..#.####...#.#..#..######
     .###....#...#....#....#.......
@@ -95,18 +107,22 @@ def test_get_full_image():
     #.#.###....##..##....####.##.#
     #...###.....##...#.....#..####
     ..#.#....###.#.#.......##.....
-    """).strip()
+    """
+    ).strip()
 
-    expected = [list(row.strip()) for row in expected_str.strip().splitlines() if row.strip()]
+    expected = [
+        list(row.strip()) for row in expected_str.strip().splitlines() if row.strip()
+    ]
     assert len(expected) == len(image)
     for i, (actual_row, expected_row) in enumerate(zip(image, expected)):
-        assert ''.join(actual_row) == ''.join(expected_row), f"i: {i}"
+        assert "".join(actual_row) == "".join(expected_row), f"i: {i}"
 
 
 def test_get_full_image_no_borders():
     image = flipv(get_full_image_no_borders())
     print("\n".join("".join(row) for row in image))
-    expected_str = dedent("""
+    expected_str = dedent(
+        """
     .#.#..#.##...#.##..#####
     ###....#.#....#..#......
     ##.##.###.#.#..######...
@@ -131,12 +147,15 @@ def test_get_full_image_no_borders():
     #.##..#..#...#..####...#
     .#.###..##..##..####.##.
     ...###...##...#...#..###
-    """).strip()
+    """
+    ).strip()
 
-    expected = [list(row.strip()) for row in expected_str.strip().splitlines() if row.strip()]
+    expected = [
+        list(row.strip()) for row in expected_str.strip().splitlines() if row.strip()
+    ]
     assert len(expected) == len(image)
     for i, (actual_row, expected_row) in enumerate(zip(image, expected)):
-        assert ''.join(actual_row) == ''.join(expected_row), f"i: {i}"
+        assert "".join(actual_row) == "".join(expected_row), f"i: {i}"
 
 
 def test_get_match():
