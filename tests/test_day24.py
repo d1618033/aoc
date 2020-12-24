@@ -1,4 +1,4 @@
-from aoc.day24 import load_data, part1, part2
+from aoc.day24 import DirectionEnum, load_data, part1, part2
 
 
 def test_part1():
@@ -10,4 +10,6 @@ def test_part2():
 
 
 def test_load_data():
-    assert load_data(["nenwweswse"]) == [["ne", "nw", "w", "e", "sw", "se"]]
+    assert load_data(["nenwweswse"]) == [
+        list(map(DirectionEnum, ["ne", "nw", "w", "e", "sw", "se"]))
+    ]

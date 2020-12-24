@@ -1,3 +1,4 @@
+import enum
 import re
 from functools import lru_cache, reduce
 
@@ -9,17 +10,30 @@ def load_data(lines=None):
         lines = load_input()
     directions = []
     for line in lines:
-        directions.append(re.findall("(?:se)|(?:sw)|(?:ne)|(?:nw)|e|w", line))
+        directions.append(
+            list(
+                map(DirectionEnum, re.findall("(?:se)|(?:sw)|(?:ne)|(?:nw)|e|w", line))
+            )
+        )
     return directions
 
 
+class DirectionEnum(enum.Enum):
+    east = "e"
+    west = "w"
+    north_west = "nw"
+    south_west = "sw"
+    north_east = "ne"
+    south_east = "se"
+
+
 direction_map = {
-    "e": (1, -1, 0),
-    "w": (-1, 1, 0),
-    "nw": (0, 1, -1),
-    "sw": (-1, 0, 1),
-    "ne": (1, 0, -1),
-    "se": (0, -1, 1),
+    DirectionEnum.east: (1, -1, 0),
+    DirectionEnum.west: (-1, 1, 0),
+    DirectionEnum.north_west: (0, 1, -1),
+    DirectionEnum.south_west: (-1, 0, 1),
+    DirectionEnum.north_east: (1, 0, -1),
+    DirectionEnum.south_east: (0, -1, 1),
 }
 
 
