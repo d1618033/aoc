@@ -23,6 +23,10 @@ DATA_FOLDER: Final[Path] = MAIN_FOLDER.parent / "data"
 logger: Final = logbook.Logger(__name__)
 
 
+def print_(*message):
+    logger.debug(" ".join(map(str, message)))
+
+
 @contextmanager
 def set_and_reset(contextvar, value):
     token = contextvar.set(value)
