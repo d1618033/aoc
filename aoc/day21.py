@@ -45,7 +45,7 @@ def get_allergen_to_ingredients(foods):
     for food in foods:
         for allergen in food.allergens:
             allergen_to_foods[allergen].append(food)
-    for allergen, foods_ in allergen_to_foods.items():
+    for allergen, _ in allergen_to_foods.items():
         allergen_to_ingredients[allergen] = reduce(
             set.intersection,
             [set(food.ingredients) for food in foods if allergen in food.allergens],
@@ -54,13 +54,14 @@ def get_allergen_to_ingredients(foods):
     while any_changes:
         any_changes = False
         for allergen, ingredients in allergen_to_ingredients.items():
-            if len(ingredients) == 1:
-                [ingredient] = ingredients
-                for allergen_, ingredients_ in allergen_to_ingredients.items():
-                    if allergen_ != allergen:
-                        if ingredient in ingredients_:
-                            any_changes = True
-                            ingredients_.discard(ingredient)
+            if len(ingredients) != 1:
+                continue
+            [ingredient] = ingredients
+            for allergen_, ingredients_ in allergen_to_ingredients.items():
+                if allergen_ != allergen:
+                    if ingredient in ingredients_:
+                        any_changes = True
+                        ingredients_.discard(ingredient)
     for food in foods:
         for allergen in food.allergens:
             ingredients = allergen_to_ingredients[allergen]

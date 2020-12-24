@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from aoc.utils import load_input
+from aoc.utils import load_input, logger
 
 
 @dataclass
@@ -55,12 +55,12 @@ def play(data, num_moves=10, verbose=False):
     for move in range(num_moves):
         current_cup = cups.head
         if verbose:
-            print(f"-- move {move + 1} --")
-            print(
-                f"cups: ",
-                " ".join(
+            logger.debug(f"-- move {move + 1} --")
+            logger.debug(
+                "cups: "
+                + " ".join(
                     [str(cup) if cup != current_cup else f"({cup})" for cup in cups]
-                ),
+                )
             )
         picked_up = []
         current_picked_up = current_cup
@@ -69,8 +69,10 @@ def play(data, num_moves=10, verbose=False):
             current_cup.next = current_picked_up.next
             picked_up.append(current_picked_up)
         if verbose:
-            print(f"picked up:", ",".join(map(str, picked_up)))
-            print(f"remaining: ", ",".join(map(str, cups.iter_from(current_cup.next))))
+            logger.debug(f'picked up: {",".join(map(str, picked_up))}')
+            logger.debug(
+                f'remaining: {",".join(map(str, cups.iter_from(current_cup.next)))}'
+            )
         destination_cup_value = current_cup.value - 1
         if destination_cup_value <= 0:
             destination_cup_value = max_data
@@ -80,14 +82,14 @@ def play(data, num_moves=10, verbose=False):
             if destination_cup_value <= 0:
                 destination_cup_value = max_data
         if verbose:
-            print(f"destination: {destination_cup_value}")
+            logger.debug(f"destination: {destination_cup_value}")
         destination_cup = cups.get(destination_cup_value)
         destination_cup_next = destination_cup.next
         destination_cup.next = picked_up[0]
         picked_up[-1].next = destination_cup_next
         cups.head = current_cup.next
         if verbose:
-            print()
+            logger.debug("")
     return cups
 
 
@@ -99,15 +101,15 @@ def part1():
 
 def part2():
     data = list(map(int, load_input()[0]))
-    data.extend([num for num in range(max(data) + 1, 10 ** 6 + 1)])
+    data.extend(range(max(data) + 1, 10 ** 6 + 1))
     cups = play(num_moves=10 ** 7, data=data)
     cup_1 = cups.get(1)
     return cup_1.next.value * cup_1.next.next.value
 
 
 def main():
-    print("part1", part1())
-    print("part2", part2())
+    logger.debug("part1", part1())
+    logger.debug("part2", part2())
 
 
 if __name__ == "__main__":
