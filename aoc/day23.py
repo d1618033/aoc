@@ -1,6 +1,4 @@
-from collections import deque
 from dataclasses import dataclass
-from typing import List, Optional, Set, Tuple
 
 from aoc.utils import load_input
 

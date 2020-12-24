@@ -1,8 +1,7 @@
 from collections import defaultdict
-from copy import deepcopy
 from dataclasses import dataclass
 from functools import reduce
-from typing import List, Optional, Set, Tuple
+from typing import Tuple
 
 from aoc.utils import load_input
 

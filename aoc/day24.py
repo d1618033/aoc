@@ -1,8 +1,5 @@
 import re
-from collections import defaultdict
-from dataclasses import dataclass
 from functools import lru_cache, reduce
-from typing import List, Optional, Set, Tuple
 
 from aoc.utils import load_input
 

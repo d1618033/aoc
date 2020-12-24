@@ -2,7 +2,7 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from math import prod
 from textwrap import dedent
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List
 
 from more_itertools import flatten
 
