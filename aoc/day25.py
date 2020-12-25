@@ -1,10 +1,4 @@
-import functools
-import itertools
-import re
-from dataclasses import dataclass
-from typing import List, Optional, Set, Tuple
-
-from aoc.utils import load_input, print_
+from aoc.utils import load_input
 
 
 def handshake(subject):
@@ -19,11 +13,12 @@ def get_pool_size(public_key):
     for i, value in enumerate(handshake(7)):
         if value == public_key:
             return i + 1
+    return None
 
 
 def get_encryption(pub_1, pub_2):
-    pool_1 = get_pool_size(pub_1)
     pool_2 = get_pool_size(pub_2)
+    v = None
     for v, _ in zip(handshake(pub_1), range(pool_2)):
         pass
     return v
