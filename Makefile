@@ -14,6 +14,9 @@ test:
 test_day%:
 	pytest -s -vvv tests/test_day$*.py
 
+solve_day%:
+	aoc solve --day $*
+
 pylint:
 	pylint $(FOLDERS)
 
