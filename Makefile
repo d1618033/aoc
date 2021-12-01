@@ -11,11 +11,11 @@ format:
 test:
 	pytest -s -vvv tests
 
-test_day%:
-	pytest -s -vvv tests/test_day$*.py
+test_day:
+	pytest -s -vvv tests/year$(YEAR)/test_day$(DAY).py
 
-solve_day%:
-	aoc solve --day $*
+solve_day:
+	aoc solve --year $(YEAR) --day $(DAY)
 
 pylint:
 	pylint $(FOLDERS)

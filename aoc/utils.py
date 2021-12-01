@@ -1,3 +1,4 @@
+import datetime
 import enum
 import inspect
 import operator
@@ -14,6 +15,7 @@ from fn.monad import Option
 
 input_file_ctx: ContextVar[Optional[Path]] = ContextVar("input_file", default=None)
 day_ctx: ContextVar[Optional[int]] = ContextVar("day", default=None)
+year_ctx: ContextVar[Optional[int]] = ContextVar("year", default=None)
 
 
 MAIN_FOLDER: Final[Path] = Path(__file__).parent
@@ -47,11 +49,22 @@ def setting_defaults(*, input_file: Optional[Path] = None, day: Optional[int] = 
         yield
 
 
+def _get_year_from_caller() -> Optional[int]:
+    for frame in inspect.stack():
+        if "day" in frame.filename:
+            return get_year_from_file_name(frame.filename)
+    return None
+
+
 def _get_day_from_caller() -> Optional[int]:
     for frame in inspect.stack():
         if "day" in frame.filename:
             return get_day_from_file_name(frame.filename)
     return None
+
+
+def get_year_from_file_name(file_name: str) -> int:
+    return int(unwrap(re.search(r"year(\d+)", file_name)).groups()[0])
 
 
 def get_day_from_file_name(file_name: str) -> int:
@@ -61,6 +74,7 @@ def get_day_from_file_name(file_name: str) -> int:
 def _get_input_file_path(
     maybe_file_path: Optional[Path] = None,
     maybe_day: Optional[int] = None,
+    maybe_year: Optional[int] = None,
 ) -> Path:
     file_path: Path = (
         Option(maybe_file_path).or_call(input_file_ctx.get).get_or(Path("input"))
@@ -68,18 +82,27 @@ def _get_input_file_path(
     if file_path.is_absolute():
         return file_path
     day = Option(maybe_day).or_call(day_ctx.get).or_call(_get_day_from_caller).get_or(1)
-    return Path(__file__).parent.parent.joinpath("data", f"day{day}", file_path)
+    year = (
+        Option(maybe_year)
+        .or_call(year_ctx.get)
+        .or_call(_get_year_from_caller)
+        .get_or(datetime.datetime.now().year)
+    )
+    return Path(__file__).parent.parent.joinpath(
+        "data", f"year{year}", f"day{day}", file_path
+    )
 
 
 def load_input(
     file_path: Optional[Path] = None,
     *,
     day: Optional[int] = None,
+    year: Optional[int] = None,
     delim="\n",
     strip=True,
     skip_empty=True,
 ):
-    lines = _get_input_file_path(file_path, day).read_text().split(delim)
+    lines = _get_input_file_path(file_path, day, year).read_text().split(delim)
     if strip:
         lines = [line.strip() for line in lines]
     if skip_empty:
