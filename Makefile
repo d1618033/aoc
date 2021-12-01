@@ -1,6 +1,7 @@
 FOLDERS:=aoc tests
 
 do_format:
+	autoflake -i -r --remove-all-unused-imports $(FOLDERS)
 	isort $(FOLDERS)
 	black $(FOLDERS)
 

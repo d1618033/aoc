@@ -1,12 +1,6 @@
-import functools
-import itertools
-import re
-from dataclasses import dataclass
-from typing import List, Optional, Set, Tuple
-
 from more_itertools import sliding_window
 
-from aoc.utils import load_ints, print_
+from aoc.utils import load_ints
 
 
 def diff(data):

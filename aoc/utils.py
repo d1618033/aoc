@@ -1,7 +1,6 @@
 import datetime
 import enum
 import inspect
-import itertools
 import operator
 import re
 from contextlib import ExitStack, contextmanager

@@ -106,7 +106,7 @@ def get_all_days(year):
 @cli.command()
 @click.option("--day", default=None)
 @click.option("--year", default=NOW.year)
-def rm(day=None):
+def rm(year, day=None):
     if day is None:
         day = get_last_day(year)
     MAIN_FOLDER.joinpath(f"year{year}").joinpath(f"day{day}.py").unlink()
