@@ -4,18 +4,24 @@ import re
 from dataclasses import dataclass
 from typing import List, Optional, Set, Tuple
 
-from aoc.utils import load_input, print_
+from more_itertools import sliding_window
+
+from aoc.utils import load_ints, print_
+
+
+def diff(data):
+    return (next_ - prev for (prev, next_) in sliding_window(data, 2))
 
 
 def part1():
-    data = list(map(int, load_input()))
-    return sum(next_ - prev > 0 for (prev, next_) in zip(data, data[1:]))
+    data = load_ints()
+    return sum(num > 0 for num in diff(data))
 
 
 def part2():
-    data = list(map(int, load_input()))
-    data = [a + b + c for a, b, c in zip(data, data[1:], data[2:])]
-    return sum(next_ - prev > 0 for (prev, next_) in zip(data, data[1:]))
+    data = load_ints()
+    data = (sum(nums) for nums in sliding_window(data, 3))
+    return sum(num > 0 for num in diff(data))
 
 
 def main():
