@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 
-from pydantic import BaseModel
-
-from aoc.utils import iadd, isub, load_input
+from aoc.utils import load_input
 
 
 @dataclass
@@ -16,51 +14,46 @@ class StatePart2(State):
     aim: int = field(default=0)
 
 
-class Command(BaseModel):
-    op: str
-    arg: int
-
-
-def run_commands(commands, op_to_func):
-    for cmd in commands:
-        op_to_func[cmd.op](cmd.arg)
-
-
-def parse(data):
-    commands = []
-    for row in data:
-        match row.split():
-            case (op, arg):
-                commands.append(Command(op=op, arg=arg))
-            case _:
-                raise ValueError(f"Can't parse line: {row}")
-    return commands
-
-
 def part1():
+    data = load_input()
     state = State()
-    op_to_func = {
-        "forward": iadd(state, "position"),
-        "up": isub(state, "depth"),
-        "down": iadd(state, "depth"),
-    }
-    run_commands(parse(load_input()), op_to_func)
+    for line in data:
+        match line.split():
+            case (op, arg):
+                arg = int(arg)
+                match op:
+                    case "forward":
+                        state.position += arg
+                    case "up":
+                        state.depth -= arg
+                    case "down":
+                        state.depth += arg
+                    case _:
+                        raise ValueError(f"Unknown op {op}")
+            case _:
+                raise ValueError(f"Can't parse line: {line}")
     return state.position * state.depth
 
 
 def part2():
+    data = load_input()
     state = StatePart2()
-
-    def forward(v):
-        state.position += v
-        state.depth += v * state.aim
-
-    op_to_func = {
-        "forward": forward,
-        "up": isub(state, "aim"),
-        "down": iadd(state, "aim"),
-    }
-    run_commands(parse(load_input()), op_to_func)
+    for line in data:
+        match line.split():
+            case (op, arg):
+                arg = int(arg)
+                match op:
+                    case "forward":
+                        state.position += arg
+                        state.depth += arg * state.aim
+                    case "up":
+                        state.aim -= arg
+                    case "down":
+                        state.aim += arg
+                    case _:
+                        raise ValueError(f"Unknown op {op}")
+            case _:
+                raise ValueError(f"Can't parse line: {line}")
     return state.position * state.depth
 
 
