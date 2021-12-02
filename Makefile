@@ -24,9 +24,6 @@ pylint:
 flake8:
 	flake8 $(FOLDERS)
 
-mypy:
-	MYPYPATH=stubs mypy $(FOLDERS)
-
-lint: flake8 pylint mypy
+lint: flake8 pylint
 
 check: format lint test
