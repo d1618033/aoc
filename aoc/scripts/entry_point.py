@@ -48,7 +48,7 @@ def solve(year, day=None, part=None, input_file=None):
 @click.option("--session", default=None)
 def new(year, day=None, session=None):
     if day is None:
-        day = get_last_day() + 1
+        day = get_last_day(year) + 1
     click.echo(f"Making day{day}")
     jinja_env = jinja2.Environment(
         loader=jinja2.PackageLoader("aoc", "templates"),
@@ -56,10 +56,10 @@ def new(year, day=None, session=None):
     )
     kwargs = {"day_number": day, "year_number": year}
     MAIN_FOLDER.joinpath(f"year{year}").joinpath(f"day{day}.py").write_text(
-        jinja_env.get_template("day.jinja").render(**kwargs)
+        jinja_env.get_template("day.jinja").render(**kwargs), encoding="utf8"
     )
     TESTS_FOLDER.joinpath(f"year{year}").joinpath(f"test_day{day}.py").write_text(
-        jinja_env.get_template("test_day.jinja").render(**kwargs)
+        jinja_env.get_template("test_day.jinja").render(**kwargs), encoding="utf8"
     )
     data_folder = DATA_FOLDER.joinpath(f"year{year}").joinpath(f"day{day}")
     data_folder.mkdir(exist_ok=True)
@@ -81,7 +81,7 @@ def download_input_for_day(year, day, *, session=None):
 
 
 def get_session():
-    config = json.loads(Path("~/.aoc").expanduser().read_text())
+    config = json.loads(Path("~/.aoc").expanduser().read_text(encoding="utf8"))
     session = config["session"]
     return session
 
@@ -99,7 +99,7 @@ def download(year, day=None, session=None):
 def get_all_days(year):
     return [
         get_day_from_file_name(str(file))
-        for file in MAIN_FOLDER.glob("year{year}/day*.py")
+        for file in MAIN_FOLDER.glob(f"year{year}/day*.py")
     ]
 
 

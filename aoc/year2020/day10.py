@@ -29,7 +29,7 @@ def get_arrangements(adapters):
     for i, adapter in enumerate(adapters):
         if 0 <= adapter <= 3:
             count += get_arrangements(
-                tuple([adapter_ - adapter for adapter_ in adapters[i + 1 :]])
+                tuple(adapter_ - adapter for adapter_ in adapters[i + 1 :])
             )
         else:
             break

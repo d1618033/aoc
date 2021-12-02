@@ -161,6 +161,7 @@ def raise_if_not(predicate, exception, *args, **kwargs):
 @curried
 def obj_inplace_op(op, obj, attr, value):
     setattr(obj, attr, op(getattr(obj, attr), value))
+    return obj
 
 
 iadd = obj_inplace_op(operator.iadd)  # pylint: disable=no-value-for-parameter

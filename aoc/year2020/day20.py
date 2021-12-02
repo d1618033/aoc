@@ -25,11 +25,11 @@ class ImagePart:
 
     @property
     def left(self):
-        return tuple([row[0] for row in self.data])
+        return tuple(row[0] for row in self.data)
 
     @property
     def right(self):
-        return tuple([row[-1] for row in self.data])
+        return tuple(row[-1] for row in self.data)
 
     @property
     def sides(self):

@@ -3,7 +3,7 @@ FOLDERS:=aoc tests
 do_format:
 	autoflake -i -r --remove-all-unused-imports $(FOLDERS)
 	isort $(FOLDERS)
-	black $(FOLDERS)
+	black --target-version py310 $(FOLDERS) 
 
 format:
 	isort -c $(FOLDERS)
