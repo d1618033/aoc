@@ -166,3 +166,7 @@ def obj_inplace_op(op, obj, attr, value):
 
 iadd = obj_inplace_op(operator.iadd)  # pylint: disable=no-value-for-parameter
 isub = obj_inplace_op(operator.isub)  # pylint: disable=no-value-for-parameter
+
+
+def sign(x):
+    return 1 if x > 0 else 0 if x == 0 else -1
