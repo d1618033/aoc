@@ -13,12 +13,12 @@ class Fishes:
 
     def next(self):
         new_fishes = collections.defaultdict(int)
-        for timer, count in self.fishes.items():
-            if timer == 0:
+        for number, count in self.fishes.items():
+            if number == 0:
                 new_fishes[8] += count
                 new_fishes[6] += count
             else:
-                new_fishes[timer - 1] += count
+                new_fishes[number - 1] += count
         self.fishes = new_fishes
         return self
 
@@ -26,14 +26,14 @@ class Fishes:
         return sum(self.fishes.values())
 
     @property
-    def all_timers(self):
+    def all_numbers(self):
         output = []
-        for timer, count in self.fishes.items():
-            output.extend([timer] * count)
+        for number, count in self.fishes.items():
+            output.extend([number] * count)
         return output
 
     def __str__(self):
-        return ",".join(map(str, self.all_timers))
+        return ",".join(map(str, self.all_numbers))
 
     def __repr__(self):
         return f"Fishes({self})"

@@ -25,7 +25,7 @@ def test_get_num_fishes():
     ],
 )
 def test_next(input_, expected):
-    assert sorted(Fishes(input_).next().all_timers) == sorted(expected)
+    assert sorted(Fishes(input_).next().all_numbers) == sorted(expected)
 
 
 def test_len():
@@ -58,5 +58,5 @@ def test_example():
     ]
     for i, day in enumerate(days):
         fishes.next()
-        assert sorted(fishes.all_timers) == sorted(day)
+        assert sorted(fishes.all_numbers) == sorted(day)
         assert len(fishes) == len(day)
