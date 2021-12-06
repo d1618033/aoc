@@ -44,7 +44,7 @@ def part1():
             case Command(op="down", arg=arg):
                 state.depth += arg
             case _:
-                raise ValueError(f"Unknown op {op}")
+                raise ValueError(f"Unknown cmd {cmd}")
     return state.position * state.depth
 
 
@@ -61,7 +61,7 @@ def part2():
             case Command(op="down", arg=arg):
                 state.aim += arg
             case _:
-                raise ValueError(f"Unknown op {op}")
+                raise ValueError(f"Unknown cmd {cmd}")
     return state.position * state.depth
 
 
