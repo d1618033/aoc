@@ -12,8 +12,7 @@ class Tile:
     def __str__(self):
         if self.marked:
             return f"*{self.number}*"
-        else:
-            return str(self.number)
+        return str(self.number)
 
 
 @dataclass
@@ -95,6 +94,7 @@ def part1():
             board.mark(number)
             if board.won:
                 return board.sum_unmarked * number
+    raise RuntimeError("No board won")
 
 
 def part2():
@@ -109,6 +109,7 @@ def part2():
                 winning_boards.append(board)
             if len(winning_boards) == len(boards):
                 return board.sum_unmarked * number
+    raise RuntimeError("No board won")
 
 
 def main():

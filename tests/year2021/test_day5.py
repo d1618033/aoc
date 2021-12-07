@@ -22,6 +22,4 @@ def test_part2():
     ],
 )
 def test_line(line, expected):
-    assert list(Line.from_str(line).all_points) == list(
-        map(lambda s: Point.from_str(s), expected)
-    )
+    assert list(Line.from_str(line).all_points) == list(map(Point.from_str, expected))

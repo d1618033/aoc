@@ -45,7 +45,7 @@ def parse_data():
 
 def get_num_fishes(days):
     fishes = Fishes(parse_data())
-    for day in range(days):
+    for _day in range(days):
         fishes.next()
     return len(fishes)
 
