@@ -2,11 +2,11 @@
 name = "aoc"
 version = "0.1.0"
 description = "Advent of Code"
-authors = ["David Sternlicht <dsternlicht@infinidat.com>"]
+authors = ["David Sternlicht <d1618033@gmail.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10,<3.11"
 pydantic = "^1.7.3"
 click = "^7.1.2"
 Jinja2 = "^2.11.2"
@@ -21,6 +21,7 @@ more-itertools = "^8.6.0"
 fn = {git = "https://github.com/d1618033/fn.py.git"}
 autoflake = "^1.4"
 mypy = "0.910"
+numpy = "^1.21.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
