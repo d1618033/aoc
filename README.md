@@ -1,7 +1,7 @@
 Advent of Code 
 ==============
 
-This repository contains my solutions to Advent of Code 2020
+This repository contains my solutions to Advent of Code 2020 and 2021
 
 # Usage
 
