@@ -43,8 +43,9 @@ def is_mapping_valid(patterns, letter_mapping):
 def detect_mapping(patterns):
     for permutation in itertools.permutations("abcdefg"):
         mapping = dict(zip(permutation, "ABCDEFG"))
-        if numbers := is_mapping_valid(patterns, mapping):
+        if is_mapping_valid(patterns, mapping):
             return mapping
+    raise RuntimeError(f"No valid mapping found for {patterns}")
 
 
 def part2():
