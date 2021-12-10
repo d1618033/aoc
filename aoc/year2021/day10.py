@@ -78,12 +78,6 @@ def calc_score_part2(expected_parens):
 
 
 def part2():
-    score_map = {
-        ")": 3,
-        "]": 57,
-        "}": 1197,
-        ">": 25137,
-    }
     scores = []
     for line in load_input():
         try:
