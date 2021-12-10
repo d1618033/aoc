@@ -12,7 +12,8 @@ class InvalidParenthesis(InvalidSyntax):
         self.expected_char = expected_char
         self.index = index
         super().__init__(
-            f"Invalid paranthesis in line {line} at index {index}. Expected {expected_char} got {invalid_char} instead"
+            f"Invalid paranthesis in line {line} at index {index}."
+            f" Expected {expected_char} got {invalid_char} instead"
         )
 
 
@@ -21,7 +22,8 @@ class IncompleteExpression(InvalidSyntax):
         self.line = line
         self.expected = expected
         super().__init__(
-            f"Incomplete line {line}. Expected closing parenthesis: {' '.join(expected)}"
+            f"Incomplete line {line}."
+            f" Expected closing parenthesis: {' '.join(expected)}"
         )
 
 
