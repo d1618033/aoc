@@ -118,6 +118,15 @@ def load_ints(
     )
 
 
+def load_board_of_ints(
+    file_path: Optional[Path] = None, *, day: Optional[int] = None, delim="\n"
+):
+    return [
+        list(map(int, line))
+        for line in load_input(file_path=file_path, day=day, delim=delim, strip=True)
+    ]
+
+
 class StringEnum(str, enum.Enum):
     pass
 
@@ -170,3 +179,14 @@ isub = obj_inplace_op(operator.isub)  # pylint: disable=no-value-for-parameter
 
 def sign(x):
     return 1 if x > 0 else 0 if x == 0 else -1
+
+
+def get_neighbors(row, col, num_rows, num_cols, diagonal=True):
+    for i in range(-1, 2):
+        for j in range(-1, 2):
+            if i == 0 and j == 0:
+                continue
+            if not diagonal and i != 0 and j != 0:
+                continue
+            if 0 <= i + row < num_rows and 0 <= j + col < num_cols:
+                yield (i + row, j + col)
