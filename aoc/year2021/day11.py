@@ -3,11 +3,11 @@ from aoc.utils import get_neighbors, load_board_of_ints
 
 def step(board):
     for i, row in enumerate(board):
-        for j, cell in enumerate(row):
+        for j, _ in enumerate(row):
             board[i][j] += 1
     flashes_to_do = set()
     for i, row in enumerate(board):
-        for j, cell in enumerate(row):
+        for j, _ in enumerate(row):
             if board[i][j] > 9:
                 flashes_to_do.add((i, j))
     flashed = set()
@@ -38,6 +38,7 @@ def part2():
         flashed = step(board)
         if len(flashed) == len(board) * len(board[0]):
             return i + 1
+    raise AssertionError("shouldn't reach here")
 
 
 def main():

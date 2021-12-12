@@ -36,7 +36,6 @@ def get_num_paths_part2(graph, starting_node, end_node, visited):
     if starting_node == end_node:
         return 1
     num_paths = 0
-    #  print(starting_node)
     for child in graph.neighbors(starting_node):
         if child == "start":
             continue
@@ -48,7 +47,6 @@ def get_num_paths_part2(graph, starting_node, end_node, visited):
                 continue
         if child == child.lower():
             visited[child] += 1
-        #  print(starting_node, child)
         num_paths += get_num_paths_part2(graph, child, end_node, visited)
         if child in visited:
             visited[child] -= 1

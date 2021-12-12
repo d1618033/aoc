@@ -52,7 +52,9 @@ def test_print_():
         (2, 2, 3, 3, False, [(1, 2), (2, 1)]),
     ],
 )
-def test_get_neighbors(row, col, num_rows, num_cols, diagonal, expected):
+def test_get_neighbors(
+    row, col, num_rows, num_cols, diagonal, expected
+):  # pylint: disable=too-many-arguments
     assert sorted(get_neighbors(row, col, num_rows, num_cols, diagonal)) == sorted(
         expected
     )
