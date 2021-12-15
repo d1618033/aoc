@@ -5,6 +5,7 @@ import operator
 import re
 from contextlib import ExitStack, contextmanager
 from contextvars import ContextVar
+from dataclasses import dataclass
 from functools import reduce
 from pathlib import Path
 from typing import Final, Optional, TypeVar
@@ -190,3 +191,56 @@ def get_neighbors(row, col, num_rows, num_cols, diagonal=True):
                 continue
             if 0 <= i + row < num_rows and 0 <= j + col < num_cols:
                 yield (i + row, j + col)
+
+
+@dataclass
+class Cell:
+    row_number: int
+    col_number: int
+    value: int
+    board: "Board"
+
+    def get_neighbors(self, diagonal=True):
+        for row, col in get_neighbors(
+            self.row_number,
+            self.col_number,
+            self.board.num_rows,
+            self.board.num_cols,
+            diagonal=diagonal,
+        ):
+            yield self.board.get_cell(row, col)
+
+    def __hash__(self):
+        return hash((self.row_number, self.col_number))
+
+
+class Board:
+    def __init__(self, data):
+        self.cells = [
+            [
+                Cell(row_number=i, col_number=j, board=self, value=col)
+                for j, col in enumerate(row)
+            ]
+            for i, row in enumerate(data)
+        ]
+
+    def get_cell(self, row_number, col_number) -> Cell:
+        return self.cells[row_number][col_number]
+
+    @property
+    def num_rows(self):
+        return len(self.cells)
+
+    @property
+    def num_cols(self):
+        return len(self.cells[0])
+
+    @property
+    def num_cells(self):
+        return self.num_rows * self.num_cols
+
+    @property
+    def cells_flat(self):
+        for row in self.cells:
+            for cell in row:
+                yield cell

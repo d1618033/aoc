@@ -1,30 +1,28 @@
-from aoc.utils import get_neighbors, load_board_of_ints
+from aoc.utils import Board, load_board_of_ints
 
 
-def step(board):
-    for i, row in enumerate(board):
-        for j, _ in enumerate(row):
-            board[i][j] += 1
+def step(board: Board):
+    for cell in board.cells_flat:
+        cell.value += 1
     flashes_to_do = set()
-    for i, row in enumerate(board):
-        for j, _ in enumerate(row):
-            if board[i][j] > 9:
-                flashes_to_do.add((i, j))
+    for cell in board.cells_flat:
+        if cell.value > 9:
+            flashes_to_do.add(cell)
     flashed = set()
     while flashes_to_do:
-        (i, j) = flashes_to_do.pop()
-        flashed.add((i, j))
-        for (ni, nj) in get_neighbors(i, j, len(board), len(row), diagonal=True):
-            board[ni][nj] += 1
-            if board[ni][nj] > 9 and (ni, nj) not in flashed:
-                flashes_to_do.add((ni, nj))
-    for (i, j) in flashed:
-        board[i][j] = 0
+        cell = flashes_to_do.pop()
+        flashed.add(cell)
+        for neighbor in cell.get_neighbors(diagonal=True):
+            neighbor.value += 1
+            if neighbor.value > 9 and neighbor not in flashed:
+                flashes_to_do.add(neighbor)
+    for neighbor in flashed:
+        neighbor.value = 0
     return flashed
 
 
 def part1():
-    board = load_board_of_ints()
+    board = Board(load_board_of_ints())
     total_flashed = 0
     for _ in range(100):
         flashed = step(board)
@@ -33,10 +31,10 @@ def part1():
 
 
 def part2():
-    board = load_board_of_ints()
+    board = Board(load_board_of_ints())
     for i in range(1000):
         flashed = step(board)
-        if len(flashed) == len(board) * len(board[0]):
+        if len(flashed) == board.num_cells:
             return i + 1
     raise AssertionError("shouldn't reach here")
 
