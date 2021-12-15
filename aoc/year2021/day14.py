@@ -74,15 +74,9 @@ def part1():
 
 def part2():
     template, rules = parse()
-    counts = run_steps_and_get_counts_slow(template, rules, 10)
-    counts_fast = run_steps_and_get_counts(template, rules, 10)
-    problematic = None
-    for char, count_fast in counts_fast.items():
-        if count_fast != counts[char]:
-            problematic = char
-    counts_fast_all = run_steps_and_get_counts(template, rules, 40)
-    counts_fast_all[problematic] += 1
-    return subtract_most_common_from_least(counts_fast_all)
+    counts_fast = run_steps_and_get_counts(template, rules, 40)
+    counts_fast[template[-1]] += 1
+    return subtract_most_common_from_least(counts_fast)
 
 
 def main():
