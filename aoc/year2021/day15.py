@@ -18,6 +18,7 @@ def get_shortest_path(board):
     )
     return sum(cell.value for cell in path[1:])
 
+
 def part1():
     board = Board(load_board_of_ints())
     return get_shortest_path(board)
@@ -26,21 +27,15 @@ def part1():
 def loop_back(number):
     return (number - 1) % 9 + 1
 
+
 def part2():
     board = load_board_of_ints()
     board_with_all_cols = []
     for row in board:
-        new_row = [
-            loop_back(cell + i)
-            for i in range(5)
-            for cell in row
-        ]
+        new_row = [loop_back(cell + i) for i in range(5) for cell in row]
         board_with_all_cols.append(new_row)
     new_board = [
-        [
-            loop_back(cell + i )
-            for cell in row
-        ]
+        [loop_back(cell + i) for cell in row]
         for i in range(5)
         for row in board_with_all_cols
     ]
