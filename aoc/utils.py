@@ -5,7 +5,7 @@ import operator
 import re
 from contextlib import ExitStack, contextmanager
 from contextvars import ContextVar
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import reduce
 from pathlib import Path
 from typing import Final, Optional, TypeVar
@@ -198,7 +198,7 @@ class Cell:
     row_number: int
     col_number: int
     value: int
-    board: "Board"
+    board: "Board" = field(repr=False)
 
     def get_neighbors(self, diagonal=True):
         for row, col in get_neighbors(
@@ -212,6 +212,16 @@ class Cell:
 
     def __hash__(self):
         return hash((self.row_number, self.col_number))
+
+    def __eq__(self, other):
+        if not isinstance(other, Cell):
+            return False
+        return (
+            self.row_number == other.row_number and self.col_number == other.col_number
+        )
+
+    def __repr__(self):
+        return f"Cell({self.row_number}, {self.col_number}, {self.value})"
 
 
 class Board:
