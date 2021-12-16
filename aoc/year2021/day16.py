@@ -2,7 +2,7 @@ import math
 from dataclasses import dataclass
 from itertools import islice
 from typing import List
-
+import abc
 from aoc.utils import load_input
 
 
@@ -87,14 +87,15 @@ def parse_packets(data) -> Packet:
     type_id = get_bin(data, 3)
     if type_id == 4:
         return LiteralPacket.from_stream(version, type_id, data)
-    else:
-        return OperatorPacket.from_stream(version, type_id, data)
+    return OperatorPacket.from_stream(version, type_id, data)
 
 
-class Visitor:
+class Visitor(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
     def visit_operator(self, packet: OperatorPacket):
         ...
 
+    @abc.abstractmethod
     def visit_literal(self, packet: OperatorPacket):
         ...
 
