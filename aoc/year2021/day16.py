@@ -1,8 +1,9 @@
+import abc
 import math
 from dataclasses import dataclass
 from itertools import islice
 from typing import List
-import abc
+
 from aoc.utils import load_input
 
 
